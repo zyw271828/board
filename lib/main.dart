@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'Note F'
   ];
   List<int> colorCodes = <int>[900, 800, 700, 600, 500, 400];
+  bool isColorCodesIncreasing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +106,25 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _addNote() {
+  void _addNote() async {
+    String newNote = await _showTextEditDialog('New Note', 'Note', null);
+
     setState(() {
-      // TODO: implement addNote
-      throw UnimplementedError();
+      if (newNote != null) {
+        entries.add(newNote);
+
+        if (isColorCodesIncreasing) {
+          colorCodes.add(colorCodes.last + 100);
+          if (colorCodes.last == 900) {
+            isColorCodesIncreasing = false;
+          }
+        } else {
+          colorCodes.add(colorCodes.last - 100);
+          if (colorCodes.last == 100) {
+            isColorCodesIncreasing = true;
+          }
+        }
+      }
     });
   }
 
