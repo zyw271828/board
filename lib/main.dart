@@ -46,13 +46,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _addNote() {
-    setState(() {
-      // TODO: implement addNote
-      throw UnimplementedError();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -87,8 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   child: Center(child: Text('Note ${entries[index]}')),
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Note ${entries[index]}'))),
+                  onPressed: () => _showNote('Note ${entries[index]}'),
                 ),
               );
             }),
@@ -98,6 +90,32 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Add a note',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  void _addNote() {
+    setState(() {
+      // TODO: implement addNote
+      throw UnimplementedError();
+    });
+  }
+
+  void _showNote(String note) {
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: Text(note),
+            ),
+            body: Center(
+                child: Text(
+              note,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 80),
+            )),
+          );
+        },
+      ),
     );
   }
 }
