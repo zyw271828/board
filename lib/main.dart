@@ -1,4 +1,5 @@
 import 'package:board/pages/home.dart';
+import 'package:board/themes/board_theme_data.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,9 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Board',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: BoardThemeData.themeData,
       home: HomePage(title: 'Board'),
     );
   }

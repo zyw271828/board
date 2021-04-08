@@ -1,4 +1,5 @@
 import 'package:board/pages/note.dart';
+import 'package:board/themes/board_theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
-                        return Colors.blue[colorCodes[index]];
+                        return BoardThemeData.primarySwatch[colorCodes[index]];
                       },
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
