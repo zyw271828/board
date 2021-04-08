@@ -102,10 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showNote(String note) {
+    // Enter landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
+    // Enter fullscreen mode
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
@@ -118,10 +122,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   return IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
+                      // Enter portrait mode
                       SystemChrome.setPreferredOrientations([
                         DeviceOrientation.portraitDown,
                         DeviceOrientation.portraitUp,
                       ]);
+
+                      // Exit fullscreen mode
+                      SystemChrome.setEnabledSystemUIOverlays(
+                          SystemUiOverlay.values);
+
                       Navigator.of(context).pop();
                     },
                   );
