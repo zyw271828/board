@@ -88,6 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         return Colors.blue[colorCodes[index]];
                       },
                     ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
                   ),
                   child: Container(
                       child: Center(child: Text(entries[index])),
