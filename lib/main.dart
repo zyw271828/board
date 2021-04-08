@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                height: 50,
+                constraints: BoxConstraints(minHeight: 50),
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -88,7 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   ),
-                  child: Center(child: Text(entries[index])),
+                  child: Container(
+                      child: Center(child: Text(entries[index])),
+                      padding: const EdgeInsets.all(8.0)),
                   onPressed: () => _showNote(entries[index]),
                   onLongPress: () => _editNote(index),
                 ),
@@ -148,9 +150,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             body: Center(
-                child: Text(
-              note,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 80),
+                child: SingleChildScrollView(
+              padding: const EdgeInsets.all(50.0),
+              scrollDirection: Axis.vertical,
+              child: Text(
+                note,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 80),
+              ),
             )),
           );
         },
@@ -184,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: TextField(
                   controller: _controller,
                   autofocus: true,
+                  maxLines: null,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: label,
