@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -101,12 +102,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showNote(String note) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return new Scaffold(
             appBar: new AppBar(
               title: Text(note),
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.portraitDown,
+                        DeviceOrientation.portraitUp,
+                      ]);
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
             ),
             body: Center(
                 child: Text(
