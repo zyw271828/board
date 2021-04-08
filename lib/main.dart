@@ -71,6 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        leading: new IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => {
+                  // TODO: implement this
+                  throw UnimplementedError()
+                }),
+        actions: <Widget>[
+          new IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () => {
+                    // TODO: implement this
+                    throw UnimplementedError()
+                  }),
+          new IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () => {
+                    // TODO: implement this
+                    throw UnimplementedError()
+                  }),
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
