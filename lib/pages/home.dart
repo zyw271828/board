@@ -29,24 +29,30 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         leading: new IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => {
-                  // TODO: implement this
-                  throw UnimplementedError()
-                }),
+          icon: const Icon(Icons.menu),
+          tooltip: 'Menu',
+          onPressed: () => {
+            // TODO: implement this
+            throw UnimplementedError()
+          },
+        ),
         actions: <Widget>[
           new IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () => {
-                    // TODO: implement this
-                    throw UnimplementedError()
-                  }),
+            icon: const Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: () => {
+              // TODO: implement this
+              throw UnimplementedError()
+            },
+          ),
           new IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () => {
-                    // TODO: implement this
-                    throw UnimplementedError()
-                  }),
+            icon: const Icon(Icons.more_vert),
+            tooltip: 'More',
+            onPressed: () => {
+              // TODO: implement this
+              throw UnimplementedError()
+            },
+          ),
         ],
       ),
       body: Center(
