@@ -47,6 +47,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<String> entries = <String>[
+    'Note A',
+    'Note B',
+    'Note C',
+    'Note D',
+    'Note E',
+    'Note F'
+  ];
+  List<int> colorCodes = <int>[900, 800, 700, 600, 500, 400];
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -55,8 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
-    final List<int> colorCodes = <int>[900, 800, 700, 600, 500, 400];
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -80,8 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   ),
-                  child: Center(child: Text('Note ${entries[index]}')),
-                  onPressed: () => _showNote('Note ${entries[index]}'),
+                  child: Center(child: Text(entries[index])),
+                  onPressed: () => _showNote(entries[index]),
+                  onLongPress: () => _editNote(index),
                 ),
               );
             }),
@@ -146,6 +155,58 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
       ),
+    );
+  }
+
+  _editNote(int index) async {
+    String editedNote =
+        await _showTextEditDialog('Edit Note', 'Note', entries[index]);
+
+    setState(() {
+      entries[index] = editedNote;
+    });
+  }
+
+  Future<String> _showTextEditDialog(
+      String title, String label, String prefilledText) async {
+    final _controller = TextEditingController();
+    _controller.text = prefilledText;
+
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(title),
+          children: <Widget>[
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _controller,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: label,
+                  ),
+                )),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () =>
+                            {Navigator.pop(context, prefilledText)}),
+                    TextButton(
+                        child: Text('Save'),
+                        onPressed: () =>
+                            {Navigator.pop(context, _controller.text)}),
+                  ],
+                )),
+          ],
+        );
+      },
     );
   }
 }
