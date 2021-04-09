@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:screen/screen.dart';
 
 class NotePage extends StatefulWidget {
   final String note;
@@ -89,8 +90,13 @@ class _NotePageState extends State<NotePage> {
                 width: 100,
                 height: MediaQuery.of(context).size.height,
                 child: GestureDetector(
-                  onVerticalDragUpdate: (details) {
-                    // TODO: implement this
+                  onVerticalDragUpdate: (details) async {
+                    double brightness =
+                        await Screen.brightness - details.delta.dy / 500;
+
+                    if (brightness >= 0 && brightness <= 1) {
+                      Screen.setBrightness(brightness);
+                    }
                   },
                 ),
               ),
