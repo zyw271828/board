@@ -58,10 +58,42 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: ListView.builder(
-            padding: const EdgeInsets.all(8.0),
-            itemCount: entries.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
+          padding: const EdgeInsets.all(8.0),
+          itemCount: entries.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Dismissible(
+              key: UniqueKey(),
+              onDismissed: (direction) {
+                if (direction == DismissDirection.startToEnd) {
+                  String deletedNote = _deleteNote(index);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("$deletedNote deleted")));
+                } else if (direction == DismissDirection.endToStart) {
+                  // TODO: implement this
+                  String deletedNote = _deleteNote(index);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("$deletedNote deleted")));
+                }
+              },
+              background: Container(
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.red,
+                alignment: Alignment.centerLeft,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+              secondaryBackground: Container(
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.orange,
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+              child: Container(
                 constraints: BoxConstraints(minHeight: 50),
                 child: ElevatedButton(
                   style: ButtonStyle(
@@ -82,8 +114,10 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => _showNote(entries[index]),
                   onLongPress: () => _editNote(index),
                 ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addNote,
@@ -99,21 +133,36 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       if (newNote != null) {
-        entries.add(newNote);
-
-        if (isColorCodesIncreasing) {
-          colorCodes.add(colorCodes.last + 100);
-          if (colorCodes.last == 900) {
-            isColorCodesIncreasing = false;
+        if (colorCodes.isNotEmpty) {
+          if (isColorCodesIncreasing) {
+            colorCodes.add(colorCodes.last + 100);
+            if (colorCodes.last == 900) {
+              isColorCodesIncreasing = false;
+            }
+          } else {
+            colorCodes.add(colorCodes.last - 100);
+            if (colorCodes.last == 100) {
+              isColorCodesIncreasing = true;
+            }
           }
         } else {
-          colorCodes.add(colorCodes.last - 100);
-          if (colorCodes.last == 100) {
-            isColorCodesIncreasing = true;
-          }
+          colorCodes.add(900);
+          isColorCodesIncreasing = false;
         }
+        entries.add(newNote);
       }
     });
+  }
+
+  String _deleteNote(int index) {
+    String deletedNote = entries[index];
+
+    setState(() {
+      entries.removeAt(index);
+      colorCodes.removeLast();
+    });
+
+    return deletedNote;
   }
 
   _editNote(int index) async {
