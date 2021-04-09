@@ -66,8 +66,22 @@ class _HomePageState extends State<HomePage> {
               onDismissed: (direction) {
                 if (direction == DismissDirection.startToEnd) {
                   String deletedNote = _deleteNote(index);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("$deletedNote deleted")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$deletedNote deleted"),
+                    action: SnackBarAction(
+                      label: "UNDO",
+                      onPressed: () => {
+                        setState(() {
+                          _addColorCodes();
+                          if (entries.length > index) {
+                            entries.insert(index, deletedNote);
+                          } else {
+                            entries.insert(entries.length, deletedNote);
+                          }
+                        })
+                      },
+                    ),
+                  ));
                 } else if (direction == DismissDirection.endToStart) {
                   // TODO: implement this
                   String deletedNote = _deleteNote(index);
@@ -128,27 +142,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _addColorCodes() {
+    if (colorCodes.isNotEmpty) {
+      if (isColorCodesIncreasing) {
+        colorCodes.add(colorCodes.last + 100);
+        if (colorCodes.last == 900) {
+          isColorCodesIncreasing = false;
+        }
+      } else {
+        colorCodes.add(colorCodes.last - 100);
+        if (colorCodes.last == 100) {
+          isColorCodesIncreasing = true;
+        }
+      }
+    } else {
+      colorCodes.add(900);
+      isColorCodesIncreasing = false;
+    }
+  }
+
   void _addNote() async {
     String newNote = await _showTextEditDialog('New Note', 'Note', null);
 
     setState(() {
       if (newNote != null) {
-        if (colorCodes.isNotEmpty) {
-          if (isColorCodesIncreasing) {
-            colorCodes.add(colorCodes.last + 100);
-            if (colorCodes.last == 900) {
-              isColorCodesIncreasing = false;
-            }
-          } else {
-            colorCodes.add(colorCodes.last - 100);
-            if (colorCodes.last == 100) {
-              isColorCodesIncreasing = true;
-            }
-          }
-        } else {
-          colorCodes.add(900);
-          isColorCodesIncreasing = false;
-        }
+        _addColorCodes();
         entries.add(newNote);
       }
     });
