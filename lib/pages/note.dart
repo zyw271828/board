@@ -71,6 +71,31 @@ class _NotePageState extends State<NotePage> {
               },
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 100,
+                height: MediaQuery.of(context).size.height,
+                child: GestureDetector(
+                  onVerticalDragUpdate: (details) {
+                    setState(() {
+                      _scaleFactor *= 1 + details.delta.dy / 50;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                width: 100,
+                height: MediaQuery.of(context).size.height,
+                child: GestureDetector(
+                  onVerticalDragUpdate: (details) {
+                    // TODO: implement this
+                  },
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
