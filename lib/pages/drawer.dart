@@ -66,14 +66,14 @@ class _NavDrawerState extends State<NavDrawer> {
         await _showThemeChangeDialog(primarySwatch);
 
     setState(() {
-      BoardThemeData.primarySwatch = newPrimarySwatch;
+      if (BoardThemeData.primarySwatch != null) {
+        BoardThemeData.themeData = ThemeData(primarySwatch: newPrimarySwatch);
+      }
     });
   }
 
   Future<MaterialColor> _showThemeChangeDialog(
       MaterialColor primarySwatch) async {
-    MaterialColor newPrimarySwatch = primarySwatch;
-
     return showDialog<MaterialColor>(
       context: context,
       builder: (BuildContext context) {
@@ -83,14 +83,28 @@ class _NavDrawerState extends State<NavDrawer> {
             Container(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   ElevatedButton(
                     child: Text('Blue'),
                     onPressed: () => {
-                      // TODO: set newPrimarySwatch
-                      Navigator.pop(context, newPrimarySwatch),
+                      Navigator.pop(context, Colors.blue),
                     },
+                    style: ElevatedButton.styleFrom(primary: Colors.blue),
+                  ),
+                  ElevatedButton(
+                    child: Text('Green'),
+                    onPressed: () => {
+                      Navigator.pop(context, Colors.green),
+                    },
+                    style: ElevatedButton.styleFrom(primary: Colors.green),
+                  ),
+                  ElevatedButton(
+                    child: Text('Red'),
+                    onPressed: () => {
+                      Navigator.pop(context, Colors.red),
+                    },
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
                   ),
                 ],
               ),
