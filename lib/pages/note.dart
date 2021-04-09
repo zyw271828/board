@@ -11,6 +11,10 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> {
+  double noteFontSize = 80;
+  double _baseScaleFactor = 1;
+  double _scaleFactor = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,15 +40,33 @@ class _NotePageState extends State<NotePage> {
           },
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(50.0),
-          scrollDirection: Axis.vertical,
-          child: Text(
-            widget.note,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 80),
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(50.0),
+              scrollDirection: Axis.vertical,
+              child: Text(
+                widget.note,
+                textScaleFactor: _scaleFactor,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: noteFontSize),
+              ),
+            ),
           ),
-        ),
+          Center(
+            child: GestureDetector(
+              onScaleStart: (details) {
+                _baseScaleFactor = _scaleFactor;
+              },
+              onScaleUpdate: (details) {
+                setState(() {
+                  _scaleFactor = _baseScaleFactor * details.scale;
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
