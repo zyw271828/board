@@ -14,32 +14,36 @@ class _NotePageState extends State<NotePage> {
   double noteFontSize = 80;
   double _baseScaleFactor = 1;
   double _scaleFactor = 1;
+  bool _showAppBar = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.note),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                // Enter portrait mode
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.portraitDown,
-                  DeviceOrientation.portraitUp,
-                ]);
+      appBar: _showAppBar
+          ? AppBar(
+              title: Text(widget.note),
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      // Enter portrait mode
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.portraitDown,
+                        DeviceOrientation.portraitUp,
+                      ]);
 
-                // Exit fullscreen mode
-                SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+                      // Exit fullscreen mode
+                      SystemChrome.setEnabledSystemUIOverlays(
+                          SystemUiOverlay.values);
 
-                Navigator.of(context).pop();
-              },
-            );
-          },
-        ),
-      ),
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
+            )
+          : null,
       body: Stack(
         children: [
           Center(
@@ -56,6 +60,7 @@ class _NotePageState extends State<NotePage> {
           ),
           Center(
             child: GestureDetector(
+              onTap: () => setState(() => _showAppBar = !_showAppBar),
               onScaleStart: (details) {
                 _baseScaleFactor = _scaleFactor;
               },
