@@ -1,3 +1,4 @@
+import 'package:board/themes/board_theme_data.dart';
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatefulWidget {
@@ -26,10 +27,7 @@ class _NavDrawerState extends State<NavDrawer> {
         ListTile(
           title: Text('Theme'),
           leading: const Icon(Icons.color_lens),
-          onTap: () {
-            // TODO: implement this
-            Navigator.pop(context);
-          },
+          onTap: () => _changeTheme(BoardThemeData.primarySwatch),
         ),
         ListTile(
           title: Text('Donate'),
@@ -60,6 +58,46 @@ class _NavDrawerState extends State<NavDrawer> {
 
     return Drawer(
       child: drawerItems,
+    );
+  }
+
+  _changeTheme(MaterialColor primarySwatch) async {
+    MaterialColor newPrimarySwatch =
+        await _showThemeChangeDialog(primarySwatch);
+
+    setState(() {
+      BoardThemeData.primarySwatch = newPrimarySwatch;
+    });
+  }
+
+  Future<MaterialColor> _showThemeChangeDialog(
+      MaterialColor primarySwatch) async {
+    MaterialColor newPrimarySwatch = primarySwatch;
+
+    return showDialog<MaterialColor>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Change Theme'),
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    child: Text('Blue'),
+                    onPressed: () => {
+                      // TODO: set newPrimarySwatch
+                      Navigator.pop(context, newPrimarySwatch),
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
