@@ -80,7 +80,7 @@ class _NotePageState extends State<NotePage> {
                 child: GestureDetector(
                   onVerticalDragUpdate: (details) {
                     setState(() {
-                      _scaleFactor *= 1 + details.delta.dy / 50;
+                      _scaleFactor *= 1 - details.delta.dy / 50;
                     });
                   },
                 ),
