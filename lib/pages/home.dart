@@ -1,3 +1,4 @@
+import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
 import 'package:board/themes/board_theme_data.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: new IconButton(
-          icon: const Icon(Icons.menu),
-          tooltip: 'Menu',
-          onPressed: () => {
-            // TODO: implement this
-            throw UnimplementedError()
-          },
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu),
+            tooltip: 'Menu',
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
         ),
         actions: <Widget>[
           new IconButton(
@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Add a note',
         child: Icon(Icons.add),
       ),
+      drawer: NavDrawer(),
     );
   }
 
