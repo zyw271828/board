@@ -1,9 +1,10 @@
+import 'package:board/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
 
 class NotePage extends StatefulWidget {
-  final String note;
+  final Note note;
 
   const NotePage({Key key, @required this.note}) : super(key: key);
 
@@ -22,7 +23,7 @@ class _NotePageState extends State<NotePage> {
     return Scaffold(
       appBar: _showAppBar
           ? AppBar(
-              title: Text(widget.note),
+              title: Text(widget.note.content),
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
@@ -52,7 +53,7 @@ class _NotePageState extends State<NotePage> {
               padding: const EdgeInsets.all(50.0),
               scrollDirection: Axis.vertical,
               child: Text(
-                widget.note,
+                widget.note.content,
                 textScaleFactor: _scaleFactor,
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: noteFontSize),

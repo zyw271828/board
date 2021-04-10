@@ -1,3 +1,4 @@
+import 'package:board/models/note.dart';
 import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
 import 'package:board/themes/board_theme_data.dart';
@@ -14,16 +15,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> entries = <String>[
-    'Note A',
-    'Note B',
-    'Note C',
-    'Note D',
-    'Note E',
-    'Note F'
+  static List<Note> notes = <Note>[
+    Note('Note A', 900),
+    Note('Note B', 800),
+    Note('Note C', 700),
+    Note('Note D', 600),
+    Note('Note E', 500),
+    Note('Note F', 400),
   ];
-  List<int> colorCodes = <int>[900, 800, 700, 600, 500, 400];
-  bool isColorCodesIncreasing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           new IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
-            onPressed: () => _searchNote(),
+            onPressed: () => _searchNote(notes),
           ),
           new IconButton(
             icon: const Icon(Icons.more_vert),
@@ -56,14 +55,14 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: ListView.builder(
           padding: const EdgeInsets.all(8.0),
-          itemCount: entries.length,
+          itemCount: notes.length,
           itemBuilder: (BuildContext context, int index) {
-            return _generateNoteDismissible(entries, colorCodes, index);
+            return _generateNoteDismissible(notes, index);
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
+        onPressed: () => _addNote(notes),
         tooltip: 'Add a note',
         child: Icon(Icons.add),
       ),
@@ -71,65 +70,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _addColorCodes() {
-    if (colorCodes.isNotEmpty) {
-      if (isColorCodesIncreasing) {
-        colorCodes.add(colorCodes.last + 100);
-        if (colorCodes.last == 900) {
-          isColorCodesIncreasing = false;
-        }
-      } else {
-        colorCodes.add(colorCodes.last - 100);
-        if (colorCodes.last == 100) {
-          isColorCodesIncreasing = true;
-        }
-      }
-    } else {
-      colorCodes.add(900);
-      isColorCodesIncreasing = false;
-    }
-  }
-
-  void _addNote() async {
-    String newNote = await _showTextEditDialog('New Note', 'Note', null);
+  void _addNote(List<Note> notes) async {
+    Note newNote =
+        await _showTextEditDialog('New Note', 'Note', Note(null, 900));
 
     setState(() {
-      if (newNote != null) {
-        _addColorCodes();
-        entries.add(newNote);
+      if (newNote.content != null) {
+        notes.add(newNote);
+        _updateColorCodes(notes);
       }
     });
   }
 
-  String _deleteNote(int index) {
-    String deletedNote = entries[index];
+  Note _deleteNote(List<Note> notes, int index) {
+    Note deletedNote = notes[index];
 
     setState(() {
-      entries.removeAt(index);
-      colorCodes.removeLast();
+      notes.removeAt(index);
+      _updateColorCodes(notes);
     });
 
     return deletedNote;
   }
 
-  _editNote(int index) async {
-    String editedNote =
-        await _showTextEditDialog('Edit Note', 'Note', entries[index]);
+  void _editNote(List<Note> notes, int index) async {
+    Note editedNote =
+        await _showTextEditDialog('Edit Note', 'Note', notes[index]);
 
     setState(() {
-      entries[index] = editedNote;
+      notes[index] = editedNote;
     });
   }
 
-  Container _generateNoteContainer(
-      List<String> entries, List<int> colorCodes, int index) {
+  Container _generateNoteContainer(List<Note> notes, int index) {
     return Container(
       constraints: BoxConstraints(minHeight: 50),
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
-              return BoardThemeData.primarySwatch[colorCodes[index]];
+              return BoardThemeData.primarySwatch[notes[index].colorCode];
             },
           ),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -139,34 +119,33 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         child: Container(
-            child: Center(child: Text(entries[index])),
+            child: Center(child: Text(notes[index].content)),
             padding: const EdgeInsets.all(8.0)),
-        onPressed: () => _showNote(entries[index]),
-        onLongPress: () => _editNote(index),
+        onPressed: () => _showNote(notes[index]),
+        onLongPress: () => _editNote(notes, index),
       ),
     );
   }
 
-  Dismissible _generateNoteDismissible(
-      List<String> entries, List<int> colorCodes, int index) {
+  Dismissible _generateNoteDismissible(List<Note> notes, int index) {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) {
         if (direction == DismissDirection.startToEnd) {
-          String deletedNote = _deleteNote(index);
+          Note deletedNote = _deleteNote(notes, index);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("$deletedNote deleted"),
+              content: Text("${deletedNote.content} deleted"),
               action: SnackBarAction(
                 label: "UNDO",
                 onPressed: () => {
                   setState(() {
-                    _addColorCodes();
-                    if (entries.length > index) {
-                      entries.insert(index, deletedNote);
+                    if (notes.length > index) {
+                      notes.insert(index, deletedNote);
                     } else {
-                      entries.insert(entries.length, deletedNote);
+                      notes.insert(notes.length, deletedNote);
                     }
+                    _updateColorCodes(notes);
                   })
                 },
               ),
@@ -174,9 +153,9 @@ class _HomePageState extends State<HomePage> {
           );
         } else if (direction == DismissDirection.endToStart) {
           // TODO: implement this
-          String deletedNote = _deleteNote(index);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("$deletedNote deleted")));
+          Note deletedNote = _deleteNote(notes, index);
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("${deletedNote.content} deleted")));
         }
       },
       background: Container(
@@ -197,13 +176,12 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
         ),
       ),
-      child: _generateNoteContainer(entries, colorCodes, index),
+      child: _generateNoteContainer(notes, index),
     );
   }
 
-  void _searchNote() {
-    List<String> entriesSearchResult = <String>[];
-    List<int> colorCodesSearchResult = <int>[];
+  void _searchNote(List<Note> notes) {
+    List<Note> noteSearchResult = <Note>[];
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
@@ -220,14 +198,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (value) => setState(() {
                     // TODO: fix setState not working
-                    entriesSearchResult = [];
-                    colorCodesSearchResult = [];
+                    noteSearchResult.clear();
 
                     if (value.isNotEmpty) {
-                      for (var i = 0; i < entries.length; i++) {
-                        if (entries[i].contains(value)) {
-                          entriesSearchResult.add(entries[i]);
-                          colorCodesSearchResult.add(colorCodes[i]);
+                      for (var i = 0; i < notes.length; i++) {
+                        if (notes[i].content.contains(value)) {
+                          noteSearchResult.add(notes[i]);
                         }
                       }
                     }
@@ -238,11 +214,10 @@ class _HomePageState extends State<HomePage> {
             body: Center(
               child: ListView.builder(
                 padding: const EdgeInsets.all(8.0),
-                itemCount: entriesSearchResult.length,
+                itemCount: noteSearchResult.length,
                 itemBuilder: (BuildContext context, int index) {
                   // TODO: fix deleteNote and switch to generateNoteDismissible
-                  return _generateNoteContainer(
-                      entriesSearchResult, colorCodesSearchResult, index);
+                  return _generateNoteContainer(noteSearchResult, index);
                 },
               ),
             ),
@@ -252,7 +227,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showNote(String note) {
+  void _showNote(Note note) {
     // Enter landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -271,13 +246,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<String> _showTextEditDialog(
-      String title, String label, String prefilledText) async {
+  Future<Note> _showTextEditDialog(
+      String title, String label, Note prefilledNote) async {
     final _controller = TextEditingController();
 
-    _controller.text = prefilledText;
+    _controller.text = prefilledNote.content;
 
-    return showDialog<String>(
+    return showDialog<Note>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -303,11 +278,13 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   TextButton(
                       child: Text('Cancel'),
-                      onPressed: () => {Navigator.pop(context, prefilledText)}),
+                      onPressed: () => {Navigator.pop(context, prefilledNote)}),
                   TextButton(
                       child: Text('Save'),
-                      onPressed: () =>
-                          {Navigator.pop(context, _controller.text)}),
+                      onPressed: () => {
+                            Navigator.pop(context,
+                                Note(_controller.text, prefilledNote.colorCode))
+                          }),
                 ],
               ),
             ),
@@ -315,5 +292,30 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  void _updateColorCodes(List<Note> notes) {
+    const int maxColorCode = 900;
+    const int minColorCode = 100;
+    const int step = 100;
+
+    int curColorCode = maxColorCode;
+    bool isColorCodesIncreasing = false;
+
+    for (var note in notes) {
+      if (isColorCodesIncreasing) {
+        note.colorCode = curColorCode;
+        curColorCode += step;
+        if (curColorCode >= maxColorCode) {
+          isColorCodesIncreasing = false;
+        }
+      } else {
+        note.colorCode = curColorCode;
+        curColorCode -= step;
+        if (curColorCode <= minColorCode) {
+          isColorCodesIncreasing = true;
+        }
+      }
+    }
   }
 }
