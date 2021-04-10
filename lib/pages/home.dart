@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.more_vert),
                   tooltip: 'More',
                   onPressed: () => {
-                    // TODO: implement this
+                    // TODO: add more menu
                     throw UnimplementedError()
                   },
                 ),
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else if (direction == DismissDirection.endToStart) {
-          // TODO: implement this
+          // TODO: sliding to star note
           Note deletedNote = _deleteNote(notes, index);
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("${deletedNote.content} deleted")));

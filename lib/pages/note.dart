@@ -29,6 +29,7 @@ class _NotePageState extends State<NotePage> {
                   return IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
+                      // TODO: do the same when using NavBar
                       // Enter portrait mode
                       SystemChrome.setPreferredOrientations([
                         DeviceOrientation.portraitDown,
@@ -47,6 +48,7 @@ class _NotePageState extends State<NotePage> {
             )
           : null,
       body: Stack(
+        // TODO: horizontal drag gesture to change note color
         children: [
           Center(
             child: SingleChildScrollView(

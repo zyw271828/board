@@ -18,6 +18,7 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
       accountEmail: Text('A Display Board.'),
       currentAccountPicture: const CircleAvatar(
+        // TODO: update logo
         child: FlutterLogo(size: 42.0),
       ),
     );
@@ -33,7 +34,7 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text('Donate'),
           leading: const Icon(Icons.payment),
           onTap: () {
-            // TODO: implement this
+            // TODO: add donate dialog
             Navigator.pop(context);
           },
         ),
@@ -41,7 +42,7 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text('Share'),
           leading: const Icon(Icons.share),
           onTap: () {
-            // TODO: implement this
+            // TODO: add share dialog
             Navigator.pop(context);
           },
         ),
@@ -49,7 +50,7 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text('About'),
           leading: const Icon(Icons.info),
           onTap: () {
-            // TODO: implement this
+            // TODO: add about dialog
             Navigator.pop(context);
           },
         ),
@@ -62,6 +63,7 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   _changeTheme(MaterialColor primarySwatch) async {
+    // TODO: unfinished app theme change
     MaterialColor newPrimarySwatch =
         await _showThemeChangeDialog(primarySwatch);
 
@@ -84,6 +86,7 @@ class _NavDrawerState extends State<NavDrawer> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // TODO: unfinished app theme change
                 children: <Widget>[
                   ElevatedButton(
                     child: Text('Blue'),
