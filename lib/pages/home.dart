@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static List<Note> notes = <Note>[
+  List<Note> notes = <Note>[
     Note('Note A', 900),
     Note('Note B', 800),
     Note('Note C', 700),
@@ -24,35 +24,68 @@ class _HomePageState extends State<HomePage> {
     Note('Note E', 500),
     Note('Note F', 400),
   ];
+  bool _isSearchButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu),
-            tooltip: 'Menu',
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        actions: <Widget>[
-          new IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () => _searchNote(notes),
-          ),
-          new IconButton(
-            icon: const Icon(Icons.more_vert),
-            tooltip: 'More',
-            onPressed: () => {
-              // TODO: implement this
-              throw UnimplementedError()
-            },
-          ),
-        ],
-      ),
+      appBar: _isSearchButtonPressed
+          ? AppBar(
+              leading: Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  tooltip: 'Back',
+                  onPressed: () => setState(() {
+                    _isSearchButtonPressed = !_isSearchButtonPressed;
+                    // TODO: unfinished notes search
+                    // TODO: do the same when using NavBar
+                  }),
+                ),
+              ),
+              title: Container(
+                child: TextField(
+                  autofocus: true,
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: 'Search Note',
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    _searchNote(notes, value);
+                  },
+                ),
+              ),
+            )
+          : AppBar(
+              title: Text(widget.title),
+              leading: Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(Icons.menu),
+                  tooltip: 'Menu',
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+              actions: <Widget>[
+                new IconButton(
+                  icon: const Icon(Icons.search),
+                  tooltip: 'Search',
+                  onPressed: () => setState(() {
+                    _isSearchButtonPressed = !_isSearchButtonPressed;
+                    // TODO: unfinished notes search
+                  }),
+                ),
+                new IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  tooltip: 'More',
+                  onPressed: () => {
+                    // TODO: implement this
+                    throw UnimplementedError()
+                  },
+                ),
+              ],
+            ),
       body: Center(
         child: ListView.builder(
           padding: const EdgeInsets.all(8.0),
@@ -181,53 +214,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _searchNote(List<Note> notes) {
-    List<Note> noteSearchResult = <Note>[];
-
-    Navigator.of(context).push(
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Container(
-                child: TextField(
-                  autofocus: true,
-                  cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search Note',
-                    hintStyle: TextStyle(color: Colors.white),
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (value) => setState(() {
-                    // TODO: fix setState not working
-                    noteSearchResult.clear();
-
-                    if (value.isNotEmpty) {
-                      for (var i = 0; i < notes.length; i++) {
-                        if (notes[i].content.contains(value)) {
-                          noteSearchResult.add(notes[i]);
-                        }
-                      }
-                    }
-                  }),
-                ),
-              ),
-            ),
-            body: Center(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8.0),
-                itemCount: noteSearchResult.length,
-                itemBuilder: (BuildContext context, int index) {
-                  // TODO: fix deleteNote and editNote
-                  return _generateNoteDismissible(noteSearchResult, index);
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
+  void _searchNote(List<Note> notes, String value) {
+    // TODO: unfinished notes search
   }
 
   void _showNote(Note note) {
