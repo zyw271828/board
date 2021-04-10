@@ -61,54 +61,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           itemCount: entries.length,
           itemBuilder: (BuildContext context, int index) {
-            return Dismissible(
-              key: UniqueKey(),
-              onDismissed: (direction) {
-                if (direction == DismissDirection.startToEnd) {
-                  String deletedNote = _deleteNote(index);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("$deletedNote deleted"),
-                    action: SnackBarAction(
-                      label: "UNDO",
-                      onPressed: () => {
-                        setState(() {
-                          _addColorCodes();
-                          if (entries.length > index) {
-                            entries.insert(index, deletedNote);
-                          } else {
-                            entries.insert(entries.length, deletedNote);
-                          }
-                        })
-                      },
-                    ),
-                  ));
-                } else if (direction == DismissDirection.endToStart) {
-                  // TODO: implement this
-                  String deletedNote = _deleteNote(index);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("$deletedNote deleted")));
-                }
-              },
-              background: Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.red,
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              secondaryBackground: Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.orange,
-                alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              child: _generateNoteContainer(entries, colorCodes, index),
-            );
+            return _generateNoteDismissible(entries, colorCodes, index);
           },
         ),
       ),
@@ -118,32 +71,6 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
       ),
       drawer: NavDrawer(),
-    );
-  }
-
-  Container _generateNoteContainer(
-      List<String> entries, List<int> colorCodes, int index) {
-    return Container(
-      constraints: BoxConstraints(minHeight: 50),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              return BoardThemeData.primarySwatch[colorCodes[index]];
-            },
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-          ),
-        ),
-        child: Container(
-            child: Center(child: Text(entries[index])),
-            padding: const EdgeInsets.all(8.0)),
-        onPressed: () => _showNote(entries[index]),
-        onLongPress: () => _editNote(index),
-      ),
     );
   }
 
@@ -195,6 +122,86 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       entries[index] = editedNote;
     });
+  }
+
+  Container _generateNoteContainer(
+      List<String> entries, List<int> colorCodes, int index) {
+    return Container(
+      constraints: BoxConstraints(minHeight: 50),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              return BoardThemeData.primarySwatch[colorCodes[index]];
+            },
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+        ),
+        child: Container(
+            child: Center(child: Text(entries[index])),
+            padding: const EdgeInsets.all(8.0)),
+        onPressed: () => _showNote(entries[index]),
+        onLongPress: () => _editNote(index),
+      ),
+    );
+  }
+
+  Dismissible _generateNoteDismissible(
+      List<String> entries, List<int> colorCodes, int index) {
+    return Dismissible(
+      key: UniqueKey(),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.startToEnd) {
+          String deletedNote = _deleteNote(index);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("$deletedNote deleted"),
+              action: SnackBarAction(
+                label: "UNDO",
+                onPressed: () => {
+                  setState(() {
+                    _addColorCodes();
+                    if (entries.length > index) {
+                      entries.insert(index, deletedNote);
+                    } else {
+                      entries.insert(entries.length, deletedNote);
+                    }
+                  })
+                },
+              ),
+            ),
+          );
+        } else if (direction == DismissDirection.endToStart) {
+          // TODO: implement this
+          String deletedNote = _deleteNote(index);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("$deletedNote deleted")));
+        }
+      },
+      background: Container(
+        padding: const EdgeInsets.all(8.0),
+        color: Colors.red,
+        alignment: Alignment.centerLeft,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      secondaryBackground: Container(
+        padding: const EdgeInsets.all(8.0),
+        color: Colors.orange,
+        alignment: Alignment.centerRight,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      child: _generateNoteContainer(entries, colorCodes, index),
+    );
   }
 
   void _showNote(String note) {
