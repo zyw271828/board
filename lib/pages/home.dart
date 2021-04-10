@@ -41,10 +41,7 @@ class _HomePageState extends State<HomePage> {
           new IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
-            onPressed: () => {
-              // TODO: implement this
-              throw UnimplementedError()
-            },
+            onPressed: () => _searchNote(),
           ),
           new IconButton(
             icon: const Icon(Icons.more_vert),
@@ -201,6 +198,55 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       child: _generateNoteContainer(entries, colorCodes, index),
+    );
+  }
+
+  void _searchNote() {
+    List<String> entriesSearchResult = <String>[];
+    List<int> colorCodesSearchResult = <int>[];
+
+    Navigator.of(context).push(
+      new MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Container(
+                child: TextField(
+                  autofocus: true,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: 'Search Note',
+                    hintStyle: TextStyle(color: Colors.white),
+                  ),
+                  onChanged: (value) => setState(() {
+                    // TODO: fix setState not working
+                    entriesSearchResult = [];
+                    colorCodesSearchResult = [];
+
+                    for (var i = 0; i < entries.length; i++) {
+                      if (entries[i].contains(value)) {
+                        entriesSearchResult.add(entries[i]);
+                        colorCodesSearchResult.add(colorCodes[i]);
+                      }
+                    }
+                  }),
+                ),
+              ),
+            ),
+            body: Center(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: entriesSearchResult.length,
+                itemBuilder: (BuildContext context, int index) {
+                  // TODO: fix deleteNote and switch to generateNoteDismissible
+                  return _generateNoteContainer(
+                      entriesSearchResult, colorCodesSearchResult, index);
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
