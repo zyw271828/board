@@ -107,28 +107,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                 ),
               ),
-              child: Container(
-                constraints: BoxConstraints(minHeight: 50),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return BoardThemeData.primarySwatch[colorCodes[index]];
-                      },
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                    ),
-                  ),
-                  child: Container(
-                      child: Center(child: Text(entries[index])),
-                      padding: const EdgeInsets.all(8.0)),
-                  onPressed: () => _showNote(entries[index]),
-                  onLongPress: () => _editNote(index),
-                ),
-              ),
+              child: _generateNoteContainer(entries, colorCodes, index),
             );
           },
         ),
@@ -139,6 +118,32 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
       ),
       drawer: NavDrawer(),
+    );
+  }
+
+  Container _generateNoteContainer(
+      List<String> entries, List<int> colorCodes, int index) {
+    return Container(
+      constraints: BoxConstraints(minHeight: 50),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              return BoardThemeData.primarySwatch[colorCodes[index]];
+            },
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+        ),
+        child: Container(
+            child: Center(child: Text(entries[index])),
+            padding: const EdgeInsets.all(8.0)),
+        onPressed: () => _showNote(entries[index]),
+        onLongPress: () => _editNote(index),
+      ),
     );
   }
 
