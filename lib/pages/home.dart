@@ -192,10 +192,12 @@ class _HomePageState extends State<HomePage> {
               title: Container(
                 child: TextField(
                   autofocus: true,
+                  cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Search Note',
                     hintStyle: TextStyle(color: Colors.white),
+                    border: InputBorder.none,
                   ),
                   onChanged: (value) => setState(() {
                     // TODO: fix setState not working
@@ -217,8 +219,8 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8.0),
                 itemCount: noteSearchResult.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // TODO: fix deleteNote and switch to generateNoteDismissible
-                  return _generateNoteContainer(noteSearchResult, index);
+                  // TODO: fix deleteNote and editNote
+                  return _generateNoteDismissible(noteSearchResult, index);
                 },
               ),
             ),
