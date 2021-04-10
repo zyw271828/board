@@ -223,10 +223,12 @@ class _HomePageState extends State<HomePage> {
                     entriesSearchResult = [];
                     colorCodesSearchResult = [];
 
-                    for (var i = 0; i < entries.length; i++) {
-                      if (entries[i].contains(value)) {
-                        entriesSearchResult.add(entries[i]);
-                        colorCodesSearchResult.add(colorCodes[i]);
+                    if (value.isNotEmpty) {
+                      for (var i = 0; i < entries.length; i++) {
+                        if (entries[i].contains(value)) {
+                          entriesSearchResult.add(entries[i]);
+                          colorCodesSearchResult.add(colorCodes[i]);
+                        }
                       }
                     }
                   }),
