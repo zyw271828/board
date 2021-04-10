@@ -2,6 +2,7 @@ import 'package:board/models/note.dart';
 import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
 import 'package:board/themes/board_theme_data.dart';
+import 'package:board/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       if (newNote.content != null) {
         notes.add(newNote);
-        _updateColorCodes(notes);
+        Helper.updateColorCodes(notes);
       }
     });
   }
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       notes.removeAt(index);
-      _updateColorCodes(notes);
+      Helper.updateColorCodes(notes);
     });
 
     return deletedNote;
@@ -145,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       notes.insert(notes.length, deletedNote);
                     }
-                    _updateColorCodes(notes);
+                    Helper.updateColorCodes(notes);
                   })
                 },
               ),
@@ -292,30 +293,5 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-  }
-
-  void _updateColorCodes(List<Note> notes) {
-    const int maxColorCode = 900;
-    const int minColorCode = 100;
-    const int step = 100;
-
-    int curColorCode = maxColorCode;
-    bool isColorCodesIncreasing = false;
-
-    for (var note in notes) {
-      if (isColorCodesIncreasing) {
-        note.colorCode = curColorCode;
-        curColorCode += step;
-        if (curColorCode >= maxColorCode) {
-          isColorCodesIncreasing = false;
-        }
-      } else {
-        note.colorCode = curColorCode;
-        curColorCode -= step;
-        if (curColorCode <= minColorCode) {
-          isColorCodesIncreasing = true;
-        }
-      }
-    }
   }
 }
