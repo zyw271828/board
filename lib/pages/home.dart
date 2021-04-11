@@ -41,9 +41,8 @@ class _HomePageState extends State<HomePage> {
                     // notes.clear();
                     // notes.addAll(duplicateNotes);
                     duplicateNotes.clear();
-                    Helper.updateColorCodes(notes);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    // TODO: unfinished notes search
+                    // Helper.updateColorCodes(notes);
+                    // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     // TODO: do the same when using NavBar
                   }),
                 ),
@@ -84,6 +83,7 @@ class _HomePageState extends State<HomePage> {
                   tooltip: 'Search',
                   onPressed: () => setState(() {
                     _isSearchButtonPressed = !_isSearchButtonPressed;
+                    duplicateNotes.clear();
                     duplicateNotes.addAll(notes);
                   }),
                 ),
@@ -103,8 +103,8 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8.0),
                 itemCount: duplicateNotes.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // TODO: fix delete in notes search
-                  return _generateNoteDismissible(duplicateNotes, index);
+                  // TODO: use generateNoteDismissible and fix delete & edit
+                  return _generateNoteContainer(duplicateNotes, index);
                 },
               ),
             )
@@ -180,7 +180,8 @@ class _HomePageState extends State<HomePage> {
             child: Center(child: Text(notes[index].content)),
             padding: const EdgeInsets.all(8.0)),
         onPressed: () => _showNote(notes[index]),
-        onLongPress: () => _editNote(notes, index),
+        onLongPress: () =>
+            _isSearchButtonPressed ? null : _editNote(notes, index),
       ),
     );
   }
@@ -203,7 +204,6 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       notes.insert(notes.length, deletedNote);
                     }
-                    // TODO: fix color in notes search
                     Helper.updateColorCodes(notes);
                   })
                 },
