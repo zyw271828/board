@@ -32,6 +32,7 @@ class LocalStorageService {
   static saveNote(List<Note> notes) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int numberOfNotes = notes.length;
+    prefs.clear();
     prefs.setInt('numberOfNotes', numberOfNotes);
 
     for (var i = 0; i < numberOfNotes; i++) {
