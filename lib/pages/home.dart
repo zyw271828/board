@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   List<Note> notes = <Note>[
     Note('Note A', 900),
     Note('Note B', 800),
@@ -26,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   ];
   List<Note> duplicateNotes = <Note>[];
   bool _isSearchButtonPressed = false;
+  bool _isAnimationPlaying = false;
+  AnimationController _animationController;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +37,23 @@ class _HomePageState extends State<HomePage> {
           ? AppBar(
               leading: Builder(
                 builder: (context) => IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.menu_arrow,
+                    progress: _animationController,
+                  ),
                   tooltip: 'Back',
-                  onPressed: () => setState(() {
-                    _isSearchButtonPressed = !_isSearchButtonPressed;
-                    // notes.clear();
-                    // notes.addAll(duplicateNotes);
-                    duplicateNotes.clear();
-                    // Helper.updateColorCodes(notes);
-                    // ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    // TODO: do the same when using NavBar
-                  }),
+                  onPressed: () {
+                    _playAnimation();
+                    setState(() {
+                      _isSearchButtonPressed = !_isSearchButtonPressed;
+                      // notes.clear();
+                      // notes.addAll(duplicateNotes);
+                      duplicateNotes.clear();
+                      // Helper.updateColorCodes(notes);
+                      // ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      // TODO: do the same when using NavBar
+                    });
+                  },
                 ),
               ),
               title: Container(
@@ -72,7 +81,10 @@ class _HomePageState extends State<HomePage> {
               title: Text(widget.title),
               leading: Builder(
                 builder: (context) => IconButton(
-                  icon: Icon(Icons.menu),
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.menu_arrow,
+                    progress: _animationController,
+                  ),
                   tooltip: 'Menu',
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
@@ -81,11 +93,14 @@ class _HomePageState extends State<HomePage> {
                 new IconButton(
                   icon: const Icon(Icons.search),
                   tooltip: 'Search',
-                  onPressed: () => setState(() {
-                    _isSearchButtonPressed = !_isSearchButtonPressed;
-                    duplicateNotes.clear();
-                    duplicateNotes.addAll(notes);
-                  }),
+                  onPressed: () {
+                    _playAnimation();
+                    setState(() {
+                      _isSearchButtonPressed = !_isSearchButtonPressed;
+                      duplicateNotes.clear();
+                      duplicateNotes.addAll(notes);
+                    });
+                  },
                 ),
                 new IconButton(
                   icon: const Icon(Icons.more_vert),
@@ -126,6 +141,19 @@ class _HomePageState extends State<HomePage> {
             ),
       drawer: _isSearchButtonPressed ? null : NavDrawer(),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    super.initState();
   }
 
   void _addNote(List<Note> notes) async {
@@ -237,6 +265,15 @@ class _HomePageState extends State<HomePage> {
       ),
       child: _generateNoteContainer(notes, index),
     );
+  }
+
+  void _playAnimation() {
+    setState(() {
+      _isAnimationPlaying = !_isAnimationPlaying;
+      _isAnimationPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+    });
   }
 
   List<int> _searchNote(List<Note> notes, String value) {
