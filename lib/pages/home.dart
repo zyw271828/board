@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     Note('Note E', 500),
     Note('Note F', 400),
   ];
+  List<Note> duplicateNotes = <Note>[];
   bool _isSearchButtonPressed = false;
 
   @override
@@ -37,6 +38,11 @@ class _HomePageState extends State<HomePage> {
                   tooltip: 'Back',
                   onPressed: () => setState(() {
                     _isSearchButtonPressed = !_isSearchButtonPressed;
+                    // notes.clear();
+                    // notes.addAll(duplicateNotes);
+                    duplicateNotes.clear();
+                    Helper.updateColorCodes(notes);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     // TODO: unfinished notes search
                     // TODO: do the same when using NavBar
                   }),
@@ -53,7 +59,12 @@ class _HomePageState extends State<HomePage> {
                     border: InputBorder.none,
                   ),
                   onChanged: (value) {
-                    _searchNote(notes, value);
+                    duplicateNotes.clear();
+                    setState(() {
+                      for (var index in _searchNote(notes, value)) {
+                        duplicateNotes.add(notes[index]);
+                      }
+                    });
                   },
                 ),
               ),
@@ -73,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   tooltip: 'Search',
                   onPressed: () => setState(() {
                     _isSearchButtonPressed = !_isSearchButtonPressed;
-                    // TODO: unfinished notes search
+                    duplicateNotes.addAll(notes);
                   }),
                 ),
                 new IconButton(
@@ -86,21 +97,34 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-      body: Center(
-        child: ListView.builder(
-          padding: const EdgeInsets.all(8.0),
-          itemCount: notes.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _generateNoteDismissible(notes, index);
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _addNote(notes),
-        tooltip: 'Add a note',
-        child: Icon(Icons.add),
-      ),
-      drawer: NavDrawer(),
+      body: _isSearchButtonPressed
+          ? Center(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: duplicateNotes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  // TODO: fix delete in notes search
+                  return _generateNoteDismissible(duplicateNotes, index);
+                },
+              ),
+            )
+          : Center(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: notes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _generateNoteDismissible(notes, index);
+                },
+              ),
+            ),
+      floatingActionButton: _isSearchButtonPressed
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _addNote(notes),
+              tooltip: 'Add a note',
+              child: Icon(Icons.add),
+            ),
+      drawer: _isSearchButtonPressed ? null : NavDrawer(),
     );
   }
 
@@ -179,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       notes.insert(notes.length, deletedNote);
                     }
+                    // TODO: fix color in notes search
                     Helper.updateColorCodes(notes);
                   })
                 },
@@ -214,8 +239,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _searchNote(List<Note> notes, String value) {
-    // TODO: unfinished notes search
+  List<int> _searchNote(List<Note> notes, String value) {
+    List<int> result = <int>[];
+
+    for (var i = 0; i < notes.length; i++) {
+      if (notes[i].content.contains(value)) {
+        result.add(i);
+      }
+    }
+    return result;
   }
 
   void _showNote(Note note) {
