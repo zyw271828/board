@@ -83,33 +83,78 @@ class _NotePageState extends State<NotePage> {
               Container(
                 width: 100,
                 height: MediaQuery.of(context).size.height,
-                child: GestureDetector(
-                  onVerticalDragUpdate: (details) async {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      double brightness =
-                          await Screen.brightness - details.delta.dy / 500;
+                child: Stack(
+                  children: [
+                    // Center(
+                    //   child: _generateProgressBarContainer(15, Colors.purple),
+                    // ),
+                    GestureDetector(
+                      onVerticalDragUpdate: (details) async {
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          double brightness =
+                              await Screen.brightness - details.delta.dy / 500;
 
-                      if (brightness >= 0 && brightness <= 1) {
-                        Screen.setBrightness(brightness);
-                      }
-                    }
-                  },
+                          if (brightness >= 0 && brightness <= 1) {
+                            Screen.setBrightness(brightness);
+                          }
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
               Container(
                 width: 100,
                 height: MediaQuery.of(context).size.height,
-                child: GestureDetector(
-                  onVerticalDragUpdate: (details) {
-                    setState(() {
-                      _scaleFactor *= 1 - details.delta.dy / 50;
-                    });
-                  },
+                child: Stack(
+                  children: [
+                    // Center(
+                    //   child: _generateProgressBarContainer(15, Colors.orange),
+                    // ),
+                    GestureDetector(
+                      onVerticalDragUpdate: (details) {
+                        setState(() {
+                          _scaleFactor *= 1 - details.delta.dy / 50;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Container _generateProgressBarContainer(int progress, MaterialColor color) {
+    // 0 <= progress <= 15
+    if (progress < 0) {
+      progress = 0;
+    } else if (progress > 15) {
+      progress = 15;
+    }
+
+    return Container(
+      width: 50,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Center(
+        child: Container(
+          width: 15,
+          height: 150,
+          color: Colors.white.withOpacity(0.5),
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: 15,
+            height: (progress * 10).toDouble(),
+            color: color.withOpacity(0.8),
+          ),
+        ),
       ),
     );
   }
