@@ -4,8 +4,8 @@ import 'package:board/models/note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
-  static loadNote() async {
-    List<Note> notes;
+  static Future<List<Note>> loadNote() async {
+    List<Note> notes = <Note>[];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int numberOfNotes = prefs.getInt('numberOfNotes');
 
