@@ -15,10 +15,14 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> {
-  double noteFontSize = 80;
+  double _noteFontSize = 80;
   double _baseScaleFactor = 1;
   double _scaleFactor = 1;
   bool _showAppBar = true;
+  bool _showFontSizeIndicator = false;
+  bool _showBrightnessIndicator = false;
+  int _fontSizeIndicatorValue = 0;
+  int _brightnessIndicatorValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +64,7 @@ class _NotePageState extends State<NotePage> {
                 widget.note.content,
                 textScaleFactor: _scaleFactor,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: noteFontSize),
+                    fontWeight: FontWeight.bold, fontSize: _noteFontSize),
               ),
             ),
           ),
@@ -72,9 +76,19 @@ class _NotePageState extends State<NotePage> {
               },
               onScaleUpdate: (details) {
                 setState(() {
+                  // _showFontSizeIndicator = true;
                   _scaleFactor = _baseScaleFactor * details.scale;
+                  _fontSizeIndicatorValue = (_scaleFactor * (15 / 3)).toInt();
                 });
               },
+              // onScaleEnd: (details) async {
+              //   // https://github.com/flutter/flutter/issues/13102
+              //   await Future.delayed(const Duration(seconds: 2), () {
+              //     setState(() {
+              //       _showFontSizeIndicator = false;
+              //     });
+              //   });
+              // },
             ),
           ),
           Row(
@@ -85,20 +99,37 @@ class _NotePageState extends State<NotePage> {
                 height: MediaQuery.of(context).size.height,
                 child: Stack(
                   children: [
-                    // Center(
-                    //   child: _generateIndicatorContainer(
-                    //       15, Icons.format_size, Colors.purple),
-                    // ),
+                    Center(
+                      child: _showFontSizeIndicator
+                          ? _generateIndicatorContainer(_fontSizeIndicatorValue,
+                              Icons.format_size, Colors.purple)
+                          : null,
+                    ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) async {
+                        setState(() {
+                          _showBrightnessIndicator = true;
+                        });
                         if (Platform.isAndroid || Platform.isIOS) {
                           double brightness =
                               await Screen.brightness - details.delta.dy / 500;
 
                           if (brightness >= 0 && brightness <= 1) {
                             Screen.setBrightness(brightness);
+                            setState(() {
+                              // Brightness cannot reach 1, so we add 0.01 here
+                              _brightnessIndicatorValue =
+                                  (brightness * (15 + 0.01)).toInt();
+                            });
                           }
                         }
+                      },
+                      onVerticalDragEnd: (details) async {
+                        await Future.delayed(const Duration(seconds: 2), () {
+                          setState(() {
+                            _showBrightnessIndicator = false;
+                          });
+                        });
                       },
                     ),
                   ],
@@ -109,14 +140,28 @@ class _NotePageState extends State<NotePage> {
                 height: MediaQuery.of(context).size.height,
                 child: Stack(
                   children: [
-                    // Center(
-                    //   child: _generateIndicatorContainer(
-                    //       15, Icons.brightness_6, Colors.orange),
-                    // ),
+                    Center(
+                      child: _showBrightnessIndicator
+                          ? _generateIndicatorContainer(
+                              _brightnessIndicatorValue,
+                              Icons.brightness_6,
+                              Colors.orange)
+                          : null,
+                    ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) {
                         setState(() {
+                          _showFontSizeIndicator = true;
                           _scaleFactor *= 1 - details.delta.dy / 50;
+                          _fontSizeIndicatorValue =
+                              (_scaleFactor * (15 / 3)).toInt();
+                        });
+                      },
+                      onVerticalDragEnd: (details) async {
+                        await Future.delayed(const Duration(seconds: 2), () {
+                          setState(() {
+                            _showFontSizeIndicator = false;
+                          });
                         });
                       },
                     ),
