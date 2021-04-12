@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:board/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,11 +85,13 @@ class _NotePageState extends State<NotePage> {
                 height: MediaQuery.of(context).size.height,
                 child: GestureDetector(
                   onVerticalDragUpdate: (details) async {
-                    double brightness =
-                        await Screen.brightness - details.delta.dy / 500;
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      double brightness =
+                          await Screen.brightness - details.delta.dy / 500;
 
-                    if (brightness >= 0 && brightness <= 1) {
-                      Screen.setBrightness(brightness);
+                      if (brightness >= 0 && brightness <= 1) {
+                        Screen.setBrightness(brightness);
+                      }
                     }
                   },
                 ),
