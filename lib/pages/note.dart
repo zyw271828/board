@@ -86,7 +86,7 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     // Center(
-                    //   child: _generateProgressBarContainer(
+                    //   child: _generateIndicatorContainer(
                     //       15, Icons.format_size, Colors.purple),
                     // ),
                     GestureDetector(
@@ -110,7 +110,7 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     // Center(
-                    //   child: _generateProgressBarContainer(
+                    //   child: _generateIndicatorContainer(
                     //       15, Icons.brightness_6, Colors.orange),
                     // ),
                     GestureDetector(
@@ -130,7 +130,7 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
-  Container _generateProgressBarContainer(
+  Container _generateIndicatorContainer(
       int progress, IconData icon, MaterialColor color) {
     // 0 <= progress <= 15
     if (progress < 0) {
