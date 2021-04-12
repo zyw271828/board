@@ -86,7 +86,8 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     // Center(
-                    //   child: _generateProgressBarContainer(15, Colors.purple),
+                    //   child: _generateProgressBarContainer(
+                    //       15, Icons.format_size, Colors.purple),
                     // ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) async {
@@ -109,7 +110,8 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     // Center(
-                    //   child: _generateProgressBarContainer(15, Colors.orange),
+                    //   child: _generateProgressBarContainer(
+                    //       15, Icons.brightness_6, Colors.orange),
                     // ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) {
@@ -128,7 +130,8 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
-  Container _generateProgressBarContainer(int progress, MaterialColor color) {
+  Container _generateProgressBarContainer(
+      int progress, IconData icon, MaterialColor color) {
     // 0 <= progress <= 15
     if (progress < 0) {
       progress = 0;
@@ -138,23 +141,55 @@ class _NotePageState extends State<NotePage> {
 
     return Container(
       width: 50,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Center(
-        child: Container(
-          width: 15,
-          height: 150,
-          color: Colors.white.withOpacity(0.5),
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: 15,
-            height: (progress * 10).toDouble(),
-            color: color.withOpacity(0.8),
+      height: 300,
+      child: Column(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            child: Center(
+                child: Text(
+              progress.toString(),
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black.withOpacity(0.5),
+              ),
+            )),
           ),
-        ),
+          Container(
+            width: 50,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Container(
+                width: 15,
+                height: 150,
+                color: Colors.white.withOpacity(0.5),
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: 15,
+                  height: (progress * 10).toDouble(),
+                  color: color.withOpacity(0.8),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 50,
+            height: 50,
+            child: Center(
+              child: Icon(
+                icon,
+                size: 30,
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
