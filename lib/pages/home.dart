@@ -1,6 +1,7 @@
 import 'package:board/models/note.dart';
 import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
+import 'package:board/services/local_storage_service.dart';
 import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  List<Note> notes = <Note>[
-    Note('Note A', 900),
-    Note('Note B', 800),
-    Note('Note C', 700),
-    Note('Note D', 600),
-    Note('Note E', 500),
-    Note('Note F', 400),
-  ];
+  List<Note> notes = <Note>[];
   List<Note> duplicateNotes = <Note>[];
   bool _isSearchButtonPressed = false;
   bool _isAnimationPlaying = false;
@@ -152,6 +146,11 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+    LocalStorageService.loadNote().then((initNotes) {
+      setState(() {
+        notes = initNotes;
+      });
+    });
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
   }
@@ -166,6 +165,8 @@ class _HomePageState extends State<HomePage>
         Helper.updateColorCodes(notes);
       });
     }
+
+    LocalStorageService.saveNote(notes);
   }
 
   Note _deleteNote(List<Note> notes, int index) {
@@ -176,6 +177,7 @@ class _HomePageState extends State<HomePage>
       Helper.updateColorCodes(notes);
     });
 
+    LocalStorageService.saveNote(notes);
     return deletedNote;
   }
 
@@ -186,6 +188,8 @@ class _HomePageState extends State<HomePage>
     setState(() {
       notes[index] = editedNote;
     });
+
+    LocalStorageService.saveNote(notes);
   }
 
   Container _generateNoteContainer(List<Note> notes, int index) {
@@ -359,5 +363,7 @@ class _HomePageState extends State<HomePage>
         Helper.updateColorCodes(notes);
       });
     }
+
+    LocalStorageService.saveNote(notes);
   }
 }
