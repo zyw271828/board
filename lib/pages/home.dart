@@ -151,21 +151,21 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
+    super.initState();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
-    super.initState();
   }
 
   void _addNote(List<Note> notes) async {
     Note newNote =
         await _showTextEditDialog('New Note', 'Note', Note(null, 900));
 
-    setState(() {
-      if (newNote.content != null) {
+    if (newNote.content != null) {
+      setState(() {
         notes.add(newNote);
         Helper.updateColorCodes(notes);
-      }
-    });
+      });
+    }
   }
 
   Note _deleteNote(List<Note> notes, int index) {
@@ -225,15 +225,8 @@ class _HomePageState extends State<HomePage>
               content: Text("${deletedNote.content} deleted"),
               action: SnackBarAction(
                 label: "UNDO",
-                onPressed: () => {
-                  setState(() {
-                    if (notes.length > index) {
-                      notes.insert(index, deletedNote);
-                    } else {
-                      notes.insert(notes.length, deletedNote);
-                    }
-                    Helper.updateColorCodes(notes);
-                  })
+                onPressed: () {
+                  _undoDeleteNote(deletedNote, notes, index);
                 },
               ),
             ),
@@ -352,5 +345,19 @@ class _HomePageState extends State<HomePage>
         );
       },
     );
+  }
+
+  void _undoDeleteNote(Note deletedNote, List<Note> notes, int index) {
+    if (notes.length > index) {
+      setState(() {
+        notes.insert(index, deletedNote);
+        Helper.updateColorCodes(notes);
+      });
+    } else {
+      setState(() {
+        notes.insert(notes.length, deletedNote);
+        Helper.updateColorCodes(notes);
+      });
+    }
   }
 }
