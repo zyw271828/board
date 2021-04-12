@@ -85,7 +85,7 @@ class _NotePageState extends State<NotePage> {
               },
               // onScaleEnd: (details) async {
               //   // https://github.com/flutter/flutter/issues/13102
-              //   await Future.delayed(const Duration(seconds: 2), () {
+              //   await Future.delayed(const Duration(seconds: 1), () {
               //     setState(() {
               //       _showFontSizeIndicator = false;
               //     });
@@ -102,10 +102,14 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     Center(
-                      child: _showFontSizeIndicator
-                          ? _generateIndicatorContainer(_fontSizeIndicatorValue,
-                              Icons.format_size, Colors.purple)
-                          : null,
+                      child: AnimatedOpacity(
+                        opacity: _showFontSizeIndicator ? 1.0 : 0.0,
+                        duration: Duration(milliseconds: 500),
+                        child: _generateIndicatorContainer(
+                            _fontSizeIndicatorValue,
+                            Icons.format_size,
+                            Colors.purple),
+                      ),
                     ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) async {
@@ -128,7 +132,7 @@ class _NotePageState extends State<NotePage> {
                         }
                       },
                       onVerticalDragEnd: (details) async {
-                        await Future.delayed(const Duration(seconds: 2), () {
+                        await Future.delayed(const Duration(seconds: 1), () {
                           setState(() {
                             _showBrightnessIndicator = false;
                           });
@@ -144,12 +148,14 @@ class _NotePageState extends State<NotePage> {
                 child: Stack(
                   children: [
                     Center(
-                      child: _showBrightnessIndicator
-                          ? _generateIndicatorContainer(
-                              _brightnessIndicatorValue,
-                              Icons.brightness_6,
-                              Colors.orange)
-                          : null,
+                      child: AnimatedOpacity(
+                        opacity: _showBrightnessIndicator ? 1.0 : 0.0,
+                        duration: Duration(milliseconds: 450),
+                        child: _generateIndicatorContainer(
+                            _brightnessIndicatorValue,
+                            Icons.brightness_6,
+                            Colors.orange),
+                      ),
                     ),
                     GestureDetector(
                       onVerticalDragUpdate: (details) {
@@ -161,7 +167,7 @@ class _NotePageState extends State<NotePage> {
                         });
                       },
                       onVerticalDragEnd: (details) async {
-                        await Future.delayed(const Duration(seconds: 2), () {
+                        await Future.delayed(const Duration(seconds: 1), () {
                           setState(() {
                             _showFontSizeIndicator = false;
                           });
