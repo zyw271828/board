@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage>
     List<int> result = <int>[];
 
     for (var i = 0; i < notes.length; i++) {
-      if (notes[i].content.contains(value)) {
+      if (notes[i].content.toLowerCase().contains(value.toLowerCase())) {
         result.add(i);
       }
     }
