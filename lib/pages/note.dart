@@ -23,6 +23,7 @@ class _NotePageState extends State<NotePage> {
   bool _showBrightnessIndicator = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
+  int _indicatorLevel = 15;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,8 @@ class _NotePageState extends State<NotePage> {
                 setState(() {
                   // _showFontSizeIndicator = true;
                   _scaleFactor = _baseScaleFactor * details.scale;
-                  _fontSizeIndicatorValue = (_scaleFactor * (15 / 3)).toInt();
+                  _fontSizeIndicatorValue =
+                      (_scaleFactor * (_indicatorLevel / 3)).toInt();
                 });
               },
               // onScaleEnd: (details) async {
@@ -119,7 +121,8 @@ class _NotePageState extends State<NotePage> {
                             setState(() {
                               // Brightness cannot reach 1, so we add 0.01 here
                               _brightnessIndicatorValue =
-                                  (brightness * (15 + 0.01)).toInt();
+                                  (brightness * (_indicatorLevel + 0.01))
+                                      .toInt();
                             });
                           }
                         }
@@ -154,7 +157,7 @@ class _NotePageState extends State<NotePage> {
                           _showFontSizeIndicator = true;
                           _scaleFactor *= 1 - details.delta.dy / 50;
                           _fontSizeIndicatorValue =
-                              (_scaleFactor * (15 / 3)).toInt();
+                              (_scaleFactor * (_indicatorLevel / 3)).toInt();
                         });
                       },
                       onVerticalDragEnd: (details) async {
@@ -177,11 +180,11 @@ class _NotePageState extends State<NotePage> {
 
   Container _generateIndicatorContainer(
       int progress, IconData icon, MaterialColor color) {
-    // 0 <= progress <= 15
+    // 0 <= progress <= _indicatorLevel
     if (progress < 0) {
       progress = 0;
-    } else if (progress > 15) {
-      progress = 15;
+    } else if (progress > _indicatorLevel) {
+      progress = _indicatorLevel;
     }
 
     return Container(
@@ -217,7 +220,7 @@ class _NotePageState extends State<NotePage> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: 15,
-                  height: (progress * 10).toDouble(),
+                  height: (progress * (150 / _indicatorLevel)).toDouble(),
                   color: color.withOpacity(0.8),
                 ),
               ),
