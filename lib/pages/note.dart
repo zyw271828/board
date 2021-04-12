@@ -82,17 +82,6 @@ class _NotePageState extends State<NotePage> {
                 width: 100,
                 height: MediaQuery.of(context).size.height,
                 child: GestureDetector(
-                  onVerticalDragUpdate: (details) {
-                    setState(() {
-                      _scaleFactor *= 1 - details.delta.dy / 50;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                width: 100,
-                height: MediaQuery.of(context).size.height,
-                child: GestureDetector(
                   onVerticalDragUpdate: (details) async {
                     double brightness =
                         await Screen.brightness - details.delta.dy / 500;
@@ -100,6 +89,17 @@ class _NotePageState extends State<NotePage> {
                     if (brightness >= 0 && brightness <= 1) {
                       Screen.setBrightness(brightness);
                     }
+                  },
+                ),
+              ),
+              Container(
+                width: 100,
+                height: MediaQuery.of(context).size.height,
+                child: GestureDetector(
+                  onVerticalDragUpdate: (details) {
+                    setState(() {
+                      _scaleFactor *= 1 - details.delta.dy / 50;
+                    });
                   },
                 ),
               ),
