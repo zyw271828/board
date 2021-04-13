@@ -300,14 +300,7 @@ class _HomePageState extends State<HomePage>
   }
 
   void _showNote(Note note) {
-    // Enter landscape mode
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-
-    // Enter fullscreen mode
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    Helper.enterDisplayMode();
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(

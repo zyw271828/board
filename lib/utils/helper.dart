@@ -2,6 +2,17 @@ import 'package:board/models/note.dart';
 import 'package:flutter/services.dart';
 
 class Helper {
+  static void enterDisplayMode() {
+    // Enter landscape mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    // Enter fullscreen mode
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
   static void exitDisplayMode() {
     // Enter portrait mode
     SystemChrome.setPreferredOrientations([
