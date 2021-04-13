@@ -31,13 +31,19 @@ class LocalStorageService {
 
   static saveNote(List<Note> notes) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int numberOfNotes = notes.length;
-    prefs.clear();
-    prefs.setInt('numberOfNotes', numberOfNotes);
 
+    int numberOfNotes = prefs.getInt('numberOfNotes');
+    if (numberOfNotes != null) {
+      for (var i = 0; i < numberOfNotes; i++) {
+        prefs.remove('note' + i.toString());
+      }
+    }
+
+    numberOfNotes = notes.length;
     for (var i = 0; i < numberOfNotes; i++) {
       String json = jsonEncode(notes[i]);
       prefs.setString('note' + i.toString(), json);
     }
+    prefs.setInt('numberOfNotes', numberOfNotes);
   }
 }
