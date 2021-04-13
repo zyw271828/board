@@ -96,12 +96,27 @@ class _HomePageState extends State<HomePage>
                     });
                   },
                 ),
-                new IconButton(
+                new PopupMenuButton(
                   icon: const Icon(Icons.more_vert),
                   tooltip: 'More',
-                  onPressed: () => {
-                    // TODO: add more menu
-                    throw UnimplementedError()
+                  itemBuilder: (BuildContext context) {
+                    return {'About', 'Exit'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                  onSelected: (choice) {
+                    switch (choice) {
+                      case 'About':
+                        // TODO: add about dialog
+                        break;
+                      case 'Exit':
+                        SystemChannels.platform
+                            .invokeMethod('SystemNavigator.pop');
+                        break;
+                    }
                   },
                 ),
               ],
