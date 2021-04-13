@@ -1,4 +1,5 @@
 import 'package:board/themes/board_theme_data.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatefulWidget {
@@ -28,7 +29,7 @@ class _NavDrawerState extends State<NavDrawer> {
         ListTile(
           title: Text('Theme'),
           leading: const Icon(Icons.color_lens),
-          onTap: () => _changeTheme(BoardThemeData.primarySwatch),
+          onTap: () => _showThemeChangeDialog(),
         ),
         ListTile(
           title: Text('Donate'),
@@ -62,33 +63,19 @@ class _NavDrawerState extends State<NavDrawer> {
     );
   }
 
-  _changeTheme(MaterialColor primarySwatch) async {
-    // TODO: unfinished app theme change
-    MaterialColor newPrimarySwatch =
-        await _showThemeChangeDialog(primarySwatch);
-
-    setState(() {
-      if (BoardThemeData.primarySwatch != null) {
-        BoardThemeData.themeData = ThemeData(primarySwatch: newPrimarySwatch);
-      }
-    });
-  }
-
-  Container _generateThemeColorContainer(MaterialColor color, bool isSelected) {
+  Container _generateThemeColorContainer(int colorIndex) {
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: color,
+        color: BoardThemeData.themeCollection[colorIndex].primaryColor,
         borderRadius: BorderRadius.circular(25),
       ),
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            // TODO: change theme
-          });
+          DynamicTheme.of(context).setTheme(colorIndex);
         },
-        child: isSelected
+        child: (colorIndex == DynamicTheme.of(context).themeId)
             ? Icon(
                 Icons.check,
                 size: 30,
@@ -99,8 +86,7 @@ class _NavDrawerState extends State<NavDrawer> {
     );
   }
 
-  Future<MaterialColor> _showThemeChangeDialog(
-      MaterialColor primarySwatch) async {
+  _showThemeChangeDialog() {
     return showDialog<MaterialColor>(
       context: context,
       builder: (BuildContext context) {
@@ -114,20 +100,21 @@ class _NavDrawerState extends State<NavDrawer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      _generateThemeColorContainer(Colors.pink, false),
-                      _generateThemeColorContainer(Colors.red, false),
-                      _generateThemeColorContainer(Colors.orange, false),
-                      _generateThemeColorContainer(Colors.green, false),
+                      _generateThemeColorContainer(BoardThemeData.pink),
+                      _generateThemeColorContainer(BoardThemeData.red),
+                      _generateThemeColorContainer(BoardThemeData.orange),
+                      _generateThemeColorContainer(BoardThemeData.green),
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      _generateThemeColorContainer(Colors.teal, false),
-                      _generateThemeColorContainer(Colors.blue, true),
-                      _generateThemeColorContainer(Colors.purple, false),
-                      _generateThemeColorContainer(Colors.grey, false),
+                      _generateThemeColorContainer(BoardThemeData.teal),
+                      _generateThemeColorContainer(BoardThemeData.blue),
+                      _generateThemeColorContainer(BoardThemeData.purple),
+                      // TODO: dark theme
+                      // _generateThemeColorContainer(BoardThemeData.dark),
                     ],
                   ),
                 ],

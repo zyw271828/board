@@ -4,6 +4,7 @@ import 'package:board/pages/note.dart';
 import 'package:board/services/local_storage_service.dart';
 import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -222,15 +223,19 @@ class _HomePageState extends State<HomePage>
   }
 
   Container _generateNoteContainer(List<Note> notes, int index) {
+    ColorSwatch swatch;
+    if (DynamicTheme.of(context).themeId != BoardThemeData.dark) {
+      swatch = Colors.primaries[DynamicTheme.of(context).themeId];
+    } else {
+      // TODO: dark theme
+    }
+
     return Container(
       constraints: BoxConstraints(minHeight: 50),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              return BoardThemeData.primarySwatch[notes[index].colorCode];
-            },
-          ),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(swatch[notes[index].colorCode]),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
