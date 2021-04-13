@@ -56,11 +56,18 @@ class _HomePageState extends State<HomePage>
                 title: Container(
                   child: TextField(
                     autofocus: true,
-                    cursorColor: Colors.white,
-                    style: TextStyle(color: Colors.white),
+                    cursorColor:
+                        Theme.of(context).accentTextTheme.bodyText1.color,
+                    style: TextStyle(
+                        color:
+                            Theme.of(context).accentTextTheme.bodyText1.color),
                     decoration: InputDecoration(
                       hintText: 'Search Note',
-                      hintStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .accentTextTheme
+                              .bodyText1
+                              .color),
                       border: InputBorder.none,
                     ),
                     onChanged: (value) {
