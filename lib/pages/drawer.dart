@@ -19,8 +19,7 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
       accountEmail: Text('A Display Board.'),
       currentAccountPicture: const CircleAvatar(
-        foregroundImage: AssetImage('assets/images/icon-android.png'),
-        backgroundColor: Colors.blue,
+        foregroundImage: AssetImage('assets/images/icon-drawer.png'),
       ),
     );
     final drawerItems = ListView(
