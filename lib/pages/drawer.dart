@@ -74,6 +74,31 @@ class _NavDrawerState extends State<NavDrawer> {
     });
   }
 
+  Container _generateThemeColorContainer(MaterialColor color, bool isSelected) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            // TODO: change theme
+          });
+        },
+        child: isSelected
+            ? Icon(
+                Icons.check,
+                size: 30,
+                color: Colors.white,
+              )
+            : null,
+      ),
+    );
+  }
+
   Future<MaterialColor> _showThemeChangeDialog(
       MaterialColor primarySwatch) async {
     return showDialog<MaterialColor>(
@@ -84,30 +109,26 @@ class _NavDrawerState extends State<NavDrawer> {
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // TODO: unfinished app theme change
-                children: <Widget>[
-                  ElevatedButton(
-                    child: Text('Blue'),
-                    onPressed: () => {
-                      Navigator.pop(context, Colors.blue),
-                    },
-                    style: ElevatedButton.styleFrom(primary: Colors.blue),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _generateThemeColorContainer(Colors.pink, false),
+                      _generateThemeColorContainer(Colors.red, false),
+                      _generateThemeColorContainer(Colors.orange, false),
+                      _generateThemeColorContainer(Colors.green, false),
+                    ],
                   ),
-                  ElevatedButton(
-                    child: Text('Green'),
-                    onPressed: () => {
-                      Navigator.pop(context, Colors.green),
-                    },
-                    style: ElevatedButton.styleFrom(primary: Colors.green),
-                  ),
-                  ElevatedButton(
-                    child: Text('Red'),
-                    onPressed: () => {
-                      Navigator.pop(context, Colors.red),
-                    },
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _generateThemeColorContainer(Colors.teal, false),
+                      _generateThemeColorContainer(Colors.blue, true),
+                      _generateThemeColorContainer(Colors.purple, false),
+                      _generateThemeColorContainer(Colors.grey, false),
+                    ],
                   ),
                 ],
               ),
