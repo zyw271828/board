@@ -18,7 +18,7 @@ class _NotePageState extends State<NotePage> {
   double _noteFontSize = 80;
   double _baseScaleFactor = 1;
   double _scaleFactor = 1;
-  bool _showAppBar = true;
+  bool _showAppBar = false;
   bool _showFontSizeIndicator = false;
   bool _showBrightnessIndicator = false;
   int _fontSizeIndicatorValue = 0;
