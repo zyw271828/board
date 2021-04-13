@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:board/models/note.dart';
+import 'package:board/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
 
 class NotePage extends StatefulWidget {
@@ -27,159 +27,155 @@ class _NotePageState extends State<NotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _showAppBar
-          ? AppBar(
-              title: Text(widget.note.content),
-              leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      // TODO: do the same when using NavBar
-                      // Enter portrait mode
-                      SystemChrome.setPreferredOrientations([
-                        DeviceOrientation.portraitDown,
-                        DeviceOrientation.portraitUp,
-                      ]);
-
-                      // Exit fullscreen mode
-                      SystemChrome.setEnabledSystemUIOverlays(
-                          SystemUiOverlay.values);
-
-                      Navigator.of(context).pop();
-                    },
-                  );
+    return WillPopScope(
+      onWillPop: () {
+        Helper.exitDisplayMode();
+        return Future<bool>.value(true);
+      },
+      child: Scaffold(
+        appBar: _showAppBar
+            ? AppBar(
+                title: Text(widget.note.content),
+                leading: Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Helper.exitDisplayMode();
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                ),
+              )
+            : null,
+        body: Stack(
+          // TODO: horizontal drag gesture to change note color
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(50.0),
+                scrollDirection: Axis.vertical,
+                child: Text(
+                  widget.note.content,
+                  textScaleFactor: _scaleFactor,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: _noteFontSize),
+                ),
+              ),
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () => setState(() => _showAppBar = !_showAppBar),
+                onScaleStart: (details) {
+                  _baseScaleFactor = _scaleFactor;
                 },
-              ),
-            )
-          : null,
-      body: Stack(
-        // TODO: horizontal drag gesture to change note color
-        children: [
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(50.0),
-              scrollDirection: Axis.vertical,
-              child: Text(
-                widget.note.content,
-                textScaleFactor: _scaleFactor,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: _noteFontSize),
+                onScaleUpdate: (details) {
+                  setState(() {
+                    // _showFontSizeIndicator = true;
+                    _scaleFactor = _baseScaleFactor * details.scale;
+                    _fontSizeIndicatorValue =
+                        (_scaleFactor * (_indicatorLevel / 3)).toInt();
+                  });
+                },
+                // onScaleEnd: (details) async {
+                //   // https://github.com/flutter/flutter/issues/13102
+                //   await Future.delayed(const Duration(seconds: 1), () {
+                //     setState(() {
+                //       _showFontSizeIndicator = false;
+                //     });
+                //   });
+                // },
               ),
             ),
-          ),
-          Center(
-            child: GestureDetector(
-              onTap: () => setState(() => _showAppBar = !_showAppBar),
-              onScaleStart: (details) {
-                _baseScaleFactor = _scaleFactor;
-              },
-              onScaleUpdate: (details) {
-                setState(() {
-                  // _showFontSizeIndicator = true;
-                  _scaleFactor = _baseScaleFactor * details.scale;
-                  _fontSizeIndicatorValue =
-                      (_scaleFactor * (_indicatorLevel / 3)).toInt();
-                });
-              },
-              // onScaleEnd: (details) async {
-              //   // https://github.com/flutter/flutter/issues/13102
-              //   await Future.delayed(const Duration(seconds: 1), () {
-              //     setState(() {
-              //       _showFontSizeIndicator = false;
-              //     });
-              //   });
-              // },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 100,
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AnimatedOpacity(
-                        opacity: _showFontSizeIndicator ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
-                        child: _generateIndicatorContainer(
-                            _fontSizeIndicatorValue,
-                            Icons.format_size,
-                            Colors.purple),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 100,
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AnimatedOpacity(
+                          opacity: _showFontSizeIndicator ? 1.0 : 0.0,
+                          duration: Duration(milliseconds: 500),
+                          child: _generateIndicatorContainer(
+                              _fontSizeIndicatorValue,
+                              Icons.format_size,
+                              Colors.purple),
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onVerticalDragUpdate: (details) async {
-                        setState(() {
-                          _showBrightnessIndicator = true;
-                        });
-                        if (Platform.isAndroid || Platform.isIOS) {
-                          double brightness =
-                              await Screen.brightness - details.delta.dy / 500;
+                      GestureDetector(
+                        onVerticalDragUpdate: (details) async {
+                          setState(() {
+                            _showBrightnessIndicator = true;
+                          });
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            double brightness = await Screen.brightness -
+                                details.delta.dy / 500;
 
-                          if (brightness >= 0 && brightness <= 1) {
-                            Screen.setBrightness(brightness);
-                            setState(() {
-                              // Brightness cannot reach 1, so we add 0.01 here
-                              _brightnessIndicatorValue =
-                                  (brightness * (_indicatorLevel + 0.01))
-                                      .toInt();
-                            });
+                            if (brightness >= 0 && brightness <= 1) {
+                              Screen.setBrightness(brightness);
+                              setState(() {
+                                // Brightness cannot reach 1, so we add 0.01 here
+                                _brightnessIndicatorValue =
+                                    (brightness * (_indicatorLevel + 0.01))
+                                        .toInt();
+                              });
+                            }
                           }
-                        }
-                      },
-                      onVerticalDragEnd: (details) async {
-                        await Future.delayed(const Duration(seconds: 1), () {
-                          setState(() {
-                            _showBrightnessIndicator = false;
+                        },
+                        onVerticalDragEnd: (details) async {
+                          await Future.delayed(const Duration(seconds: 1), () {
+                            setState(() {
+                              _showBrightnessIndicator = false;
+                            });
                           });
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 100,
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AnimatedOpacity(
-                        opacity: _showBrightnessIndicator ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 450),
-                        child: _generateIndicatorContainer(
-                            _brightnessIndicatorValue,
-                            Icons.brightness_6,
-                            Colors.orange),
+                        },
                       ),
-                    ),
-                    GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        setState(() {
-                          _showFontSizeIndicator = true;
-                          _scaleFactor *= 1 - details.delta.dy / 50;
-                          _fontSizeIndicatorValue =
-                              (_scaleFactor * (_indicatorLevel / 3)).toInt();
-                        });
-                      },
-                      onVerticalDragEnd: (details) async {
-                        await Future.delayed(const Duration(seconds: 1), () {
-                          setState(() {
-                            _showFontSizeIndicator = false;
-                          });
-                        });
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Container(
+                  width: 100,
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AnimatedOpacity(
+                          opacity: _showBrightnessIndicator ? 1.0 : 0.0,
+                          duration: Duration(milliseconds: 450),
+                          child: _generateIndicatorContainer(
+                              _brightnessIndicatorValue,
+                              Icons.brightness_6,
+                              Colors.orange),
+                        ),
+                      ),
+                      GestureDetector(
+                        onVerticalDragUpdate: (details) {
+                          setState(() {
+                            _showFontSizeIndicator = true;
+                            _scaleFactor *= 1 - details.delta.dy / 50;
+                            _fontSizeIndicatorValue =
+                                (_scaleFactor * (_indicatorLevel / 3)).toInt();
+                          });
+                        },
+                        onVerticalDragEnd: (details) async {
+                          await Future.delayed(const Duration(seconds: 1), () {
+                            setState(() {
+                              _showFontSizeIndicator = false;
+                            });
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

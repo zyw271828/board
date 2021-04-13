@@ -1,6 +1,18 @@
 import 'package:board/models/note.dart';
+import 'package:flutter/services.dart';
 
 class Helper {
+  static void exitDisplayMode() {
+    // Enter portrait mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+
+    // Exit fullscreen mode
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+  }
+
   static void updateColorCodes(List<Note> notes) {
     const int maxColorCode = 900;
     const int minColorCode = 100;
