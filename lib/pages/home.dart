@@ -26,129 +26,132 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _isSearchButtonPressed
-          ? AppBar(
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: AnimatedIcon(
-                    icon: AnimatedIcons.menu_arrow,
-                    progress: _animationController,
+    return WillPopScope(
+      onWillPop: () {
+        if (_isSearchButtonPressed) {
+          _playAnimation();
+          _exitSearchMode();
+          return Future<bool>.value(false);
+        } else {
+          return Future<bool>.value(true);
+        }
+      },
+      child: Scaffold(
+        appBar: _isSearchButtonPressed
+            ? AppBar(
+                leading: Builder(
+                  builder: (context) => IconButton(
+                    icon: AnimatedIcon(
+                      icon: AnimatedIcons.menu_arrow,
+                      progress: _animationController,
+                    ),
+                    tooltip: 'Back',
+                    onPressed: () {
+                      _playAnimation();
+                      _exitSearchMode();
+                    },
                   ),
-                  tooltip: 'Back',
-                  onPressed: () {
-                    _playAnimation();
-                    setState(() {
-                      _isSearchButtonPressed = !_isSearchButtonPressed;
-                      // notes.clear();
-                      // notes.addAll(duplicateNotes);
-                      duplicateNotes.clear();
-                      // Helper.updateColorCodes(notes);
-                      // ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      // TODO: do the same when using NavBar
-                    });
-                  },
                 ),
-              ),
-              title: Container(
-                child: TextField(
-                  autofocus: true,
-                  cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search Note',
-                    hintStyle: TextStyle(color: Colors.white),
-                    border: InputBorder.none,
+                title: Container(
+                  child: TextField(
+                    autofocus: true,
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Search Note',
+                      hintStyle: TextStyle(color: Colors.white),
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      duplicateNotes.clear();
+                      setState(() {
+                        for (var index in _searchNote(notes, value)) {
+                          duplicateNotes.add(notes[index]);
+                        }
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    duplicateNotes.clear();
-                    setState(() {
-                      for (var index in _searchNote(notes, value)) {
-                        duplicateNotes.add(notes[index]);
+                ),
+              )
+            : AppBar(
+                title: Text(widget.title),
+                leading: Builder(
+                  builder: (context) => IconButton(
+                    icon: AnimatedIcon(
+                      icon: AnimatedIcons.menu_arrow,
+                      progress: _animationController,
+                    ),
+                    tooltip: 'Menu',
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                ),
+                actions: <Widget>[
+                  new IconButton(
+                    icon: const Icon(Icons.search),
+                    tooltip: 'Search',
+                    onPressed: () {
+                      _playAnimation();
+                      setState(() {
+                        _isSearchButtonPressed = !_isSearchButtonPressed;
+                        duplicateNotes.clear();
+                        duplicateNotes.addAll(notes);
+                      });
+                    },
+                  ),
+                  new PopupMenuButton(
+                    icon: const Icon(Icons.more_vert),
+                    tooltip: 'More',
+                    itemBuilder: (BuildContext context) {
+                      return {'About', 'Exit'}.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                    onSelected: (choice) {
+                      switch (choice) {
+                        case 'About':
+                          // TODO: add about dialog
+                          break;
+                        case 'Exit':
+                          SystemChannels.platform
+                              .invokeMethod('SystemNavigator.pop');
+                          break;
                       }
-                    });
-                  },
-                ),
-              ),
-            )
-          : AppBar(
-              title: Text(widget.title),
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: AnimatedIcon(
-                    icon: AnimatedIcons.menu_arrow,
-                    progress: _animationController,
+                    },
                   ),
-                  tooltip: 'Menu',
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
+                ],
               ),
-              actions: <Widget>[
-                new IconButton(
-                  icon: const Icon(Icons.search),
-                  tooltip: 'Search',
-                  onPressed: () {
-                    _playAnimation();
-                    setState(() {
-                      _isSearchButtonPressed = !_isSearchButtonPressed;
-                      duplicateNotes.clear();
-                      duplicateNotes.addAll(notes);
-                    });
+        body: _isSearchButtonPressed
+            ? Center(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: duplicateNotes.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    // TODO: use generateNoteDismissible and fix delete & edit
+                    return _generateNoteContainer(duplicateNotes, index);
                   },
                 ),
-                new PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
-                  tooltip: 'More',
-                  itemBuilder: (BuildContext context) {
-                    return {'About', 'Exit'}.map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  },
-                  onSelected: (choice) {
-                    switch (choice) {
-                      case 'About':
-                        // TODO: add about dialog
-                        break;
-                      case 'Exit':
-                        SystemChannels.platform
-                            .invokeMethod('SystemNavigator.pop');
-                        break;
-                    }
+              )
+            : Center(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: notes.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _generateNoteDismissible(notes, index);
                   },
                 ),
-              ],
-            ),
-      body: _isSearchButtonPressed
-          ? Center(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8.0),
-                itemCount: duplicateNotes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  // TODO: use generateNoteDismissible and fix delete & edit
-                  return _generateNoteContainer(duplicateNotes, index);
-                },
               ),
-            )
-          : Center(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8.0),
-                itemCount: notes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _generateNoteDismissible(notes, index);
-                },
+        floatingActionButton: _isSearchButtonPressed
+            ? null
+            : FloatingActionButton(
+                onPressed: () => _addNote(notes),
+                tooltip: 'Add a note',
+                child: Icon(Icons.add),
               ),
-            ),
-      floatingActionButton: _isSearchButtonPressed
-          ? null
-          : FloatingActionButton(
-              onPressed: () => _addNote(notes),
-              tooltip: 'Add a note',
-              child: Icon(Icons.add),
-            ),
-      drawer: _isSearchButtonPressed ? null : NavDrawer(),
+        drawer: _isSearchButtonPressed ? null : NavDrawer(),
+      ),
     );
   }
 
@@ -205,6 +208,17 @@ class _HomePageState extends State<HomePage>
     });
 
     LocalStorageService.saveNote(notes);
+  }
+
+  _exitSearchMode() {
+    setState(() {
+      _isSearchButtonPressed = !_isSearchButtonPressed;
+      // notes.clear();
+      // notes.addAll(duplicateNotes);
+      duplicateNotes.clear();
+      // Helper.updateColorCodes(notes);
+      // ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    });
   }
 
   Container _generateNoteContainer(List<Note> notes, int index) {
