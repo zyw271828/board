@@ -18,8 +18,8 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
       accountEmail: Text('A Display Board.'),
       currentAccountPicture: const CircleAvatar(
-        // TODO: update logo
-        child: FlutterLogo(size: 42.0),
+        foregroundImage: AssetImage('assets/images/icon-android.png'),
+        backgroundColor: Colors.blue,
       ),
     );
     final drawerItems = ListView(
