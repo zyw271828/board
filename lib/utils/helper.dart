@@ -42,7 +42,7 @@ class Helper {
 
   static void updateColorCodes(List<Note> notes) {
     const int maxColorCode = 900;
-    const int minColorCode = 100;
+    const int minColorCode = 300;
     const int step = 100;
 
     int curColorCode = maxColorCode;
