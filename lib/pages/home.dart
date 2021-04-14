@@ -280,7 +280,10 @@ class _HomePageState extends State<HomePage>
             child: Container(
               constraints: BoxConstraints(minHeight: 50),
               alignment: Alignment.centerRight,
-              child: Icon(Icons.drag_handle),
+              child: Icon(
+                Icons.drag_handle,
+                color: Theme.of(context).accentTextTheme.bodyText1.color,
+              ),
               padding: const EdgeInsets.all(8.0),
             ),
           ),
