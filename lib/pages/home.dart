@@ -6,6 +6,7 @@ import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wakelock/wakelock.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -364,6 +365,7 @@ class _HomePageState extends State<HomePage>
 
   void _showNote(Note note) {
     Helper.enterDisplayMode();
+    Wakelock.enable();
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(

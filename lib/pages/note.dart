@@ -5,6 +5,7 @@ import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
+import 'package:wakelock/wakelock.dart';
 
 class NotePage extends StatefulWidget {
   final Note note;
@@ -30,6 +31,7 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
+        Wakelock.disable();
         Helper.exitDisplayMode();
         return Future<bool>.value(true);
       },
