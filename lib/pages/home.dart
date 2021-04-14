@@ -263,6 +263,10 @@ class _HomePageState extends State<HomePage>
   Dismissible _generateNoteDismissible(List<Note> notes, int index) {
     return Dismissible(
       key: UniqueKey(),
+      dismissThresholds: <DismissDirection, double>{
+        DismissDirection.startToEnd: 0.4,
+        DismissDirection.endToStart: 1.0,
+      },
       onDismissed: (direction) {
         if (direction == DismissDirection.startToEnd) {
           Note deletedNote = _deleteNote(notes, index);
@@ -279,9 +283,9 @@ class _HomePageState extends State<HomePage>
           );
         } else if (direction == DismissDirection.endToStart) {
           // TODO: sliding to star note
-          Note deletedNote = _deleteNote(notes, index);
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("${deletedNote.content} deleted")));
+          setState(() {
+            notes = notes;
+          });
         }
       },
       background: Container(
@@ -298,7 +302,7 @@ class _HomePageState extends State<HomePage>
         color: Colors.orange,
         alignment: Alignment.centerRight,
         child: Icon(
-          Icons.delete,
+          Icons.star,
           color: Colors.white,
         ),
       ),
