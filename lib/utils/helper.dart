@@ -24,6 +24,22 @@ class Helper {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
 
+  static int generateDarkThemeId(int lightThemeId) {
+    return isLightTheme(lightThemeId) ? (lightThemeId + 100) : null;
+  }
+
+  static int generateLightThemeId(int darkThemeId) {
+    return isDarkTheme(darkThemeId) ? (darkThemeId - 100) : null;
+  }
+
+  static bool isDarkTheme(int themeId) {
+    return !isLightTheme(themeId);
+  }
+
+  static bool isLightTheme(int themeId) {
+    return themeId < 100;
+  }
+
   static void updateColorCodes(List<Note> notes) {
     const int maxColorCode = 900;
     const int minColorCode = 100;

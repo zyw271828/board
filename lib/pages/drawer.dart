@@ -1,4 +1,5 @@
 import 'package:board/themes/board_theme_data.dart';
+import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 
@@ -62,19 +63,27 @@ class _NavDrawerState extends State<NavDrawer> {
     );
   }
 
-  Container _generateThemeColorContainer(int colorIndex) {
+  Container _generateThemeColorContainer(int themeId) {
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: BoardThemeData.themeCollection[colorIndex].primaryColor,
+        color: BoardThemeData.themeCollection[themeId].primaryColor,
         borderRadius: BorderRadius.circular(25),
       ),
       child: GestureDetector(
         onTap: () {
-          DynamicTheme.of(context).setTheme(colorIndex);
+          int currentThemeId = DynamicTheme.of(context).themeId;
+          if (Helper.isLightTheme(currentThemeId)) {
+            DynamicTheme.of(context).setTheme(themeId);
+          } else {
+            DynamicTheme.of(context)
+                .setTheme(Helper.generateDarkThemeId(themeId));
+          }
         },
-        child: (colorIndex == DynamicTheme.of(context).themeId)
+        child: (themeId == DynamicTheme.of(context).themeId ||
+                Helper.generateDarkThemeId(themeId) ==
+                    DynamicTheme.of(context).themeId)
             ? Icon(
                 Icons.check,
                 size: 30,
@@ -102,18 +111,41 @@ class _NavDrawerState extends State<NavDrawer> {
                       _generateThemeColorContainer(BoardThemeData.pink),
                       _generateThemeColorContainer(BoardThemeData.red),
                       _generateThemeColorContainer(BoardThemeData.orange),
-                      _generateThemeColorContainer(BoardThemeData.green),
+                      _generateThemeColorContainer(BoardThemeData.yellow),
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
+                      _generateThemeColorContainer(BoardThemeData.green),
                       _generateThemeColorContainer(BoardThemeData.teal),
                       _generateThemeColorContainer(BoardThemeData.blue),
                       _generateThemeColorContainer(BoardThemeData.purple),
-                      // TODO: dark theme
-                      // _generateThemeColorContainer(BoardThemeData.dark),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Helper.isDarkTheme(DynamicTheme.of(context).themeId)
+                          ? Icons.brightness_low
+                          : Icons.brightness_high),
+                      Switch(
+                        value: Helper.isDarkTheme(
+                            DynamicTheme.of(context).themeId),
+                        activeColor: Theme.of(context).accentColor,
+                        onChanged: (value) {
+                          int themeId = DynamicTheme.of(context).themeId;
+                          if (Helper.isLightTheme(themeId)) {
+                            DynamicTheme.of(context)
+                                .setTheme(Helper.generateDarkThemeId(themeId));
+                          } else {
+                            DynamicTheme.of(context)
+                                .setTheme(Helper.generateLightThemeId(themeId));
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ],

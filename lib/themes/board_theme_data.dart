@@ -10,21 +10,67 @@ class BoardThemeData {
   static const int blue = 5;
   static const int teal = 8;
   static const int green = 9;
+  static const int yellow = 12;
   static const int orange = 14;
-  static const int dark = 255;
+  static const int darkRed = red + 100;
+  static const int darkPink = pink + 100;
+  static const int darkPurple = purple + 100;
+  static const int darkBlue = blue + 100;
+  static const int darkTeal = teal + 100;
+  static const int darkGreen = green + 100;
+  static const int darkYellow = yellow + 100;
+  static const int darkOrange = orange + 100;
 
   static final themeCollection = ThemeCollection(
     themes: {
       pink: ThemeData(primarySwatch: Colors.pink),
       red: ThemeData(primarySwatch: Colors.red),
       orange: ThemeData(primarySwatch: Colors.orange),
+      yellow: ThemeData(primarySwatch: Colors.yellow),
       green: ThemeData(primarySwatch: Colors.green),
       teal: ThemeData(primarySwatch: Colors.teal),
       blue: ThemeData(primarySwatch: Colors.blue),
       purple: ThemeData(primarySwatch: Colors.purple),
-      // TODO: dark theme
-      // dark: ThemeData.dark(),
+      darkPink: ThemeData(
+        primarySwatch: Colors.pink,
+        accentColor: Colors.pink,
+        brightness: Brightness.dark,
+      ),
+      darkRed: ThemeData(
+        primarySwatch: Colors.red,
+        accentColor: Colors.red,
+        brightness: Brightness.dark,
+      ),
+      darkOrange: ThemeData(
+        primarySwatch: Colors.orange,
+        accentColor: Colors.orange,
+        brightness: Brightness.dark,
+      ),
+      darkYellow: ThemeData(
+        primarySwatch: Colors.yellow,
+        accentColor: Colors.yellow,
+        brightness: Brightness.dark,
+      ),
+      darkGreen: ThemeData(
+        primarySwatch: Colors.green,
+        accentColor: Colors.green,
+        brightness: Brightness.dark,
+      ),
+      darkTeal: ThemeData(
+        primarySwatch: Colors.teal,
+        accentColor: Colors.teal,
+        brightness: Brightness.dark,
+      ),
+      darkBlue: ThemeData(
+        primarySwatch: Colors.blue,
+        accentColor: Colors.blue,
+        brightness: Brightness.dark,
+      ),
+      darkPurple: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.purple,
+        brightness: Brightness.dark,
+      ),
     },
-    fallbackTheme: ThemeData.light(),
   );
 }

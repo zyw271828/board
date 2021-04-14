@@ -231,10 +231,12 @@ class _HomePageState extends State<HomePage>
 
   Container _generateNoteContainer(List<Note> notes, int index) {
     ColorSwatch swatch;
-    if (DynamicTheme.of(context).themeId != BoardThemeData.dark) {
+    if (Helper.isLightTheme(DynamicTheme.of(context).themeId)) {
       swatch = Colors.primaries[DynamicTheme.of(context).themeId];
     } else {
-      // TODO: dark theme
+      // Dark theme, but use the Colors.primaries of the light theme
+      swatch = Colors.primaries[
+          Helper.generateLightThemeId(DynamicTheme.of(context).themeId)];
     }
 
     return Container(
