@@ -2,7 +2,6 @@ import 'package:board/models/note.dart';
 import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
 import 'package:board/services/local_storage_service.dart';
-import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
