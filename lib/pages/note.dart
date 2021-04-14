@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:board/models/note.dart';
 import 'package:board/utils/helper.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 
@@ -189,6 +190,10 @@ class _NotePageState extends State<NotePage> {
       progress = _indicatorLevel;
     }
 
+    bool isDarkTheme = Helper.isDarkTheme(DynamicTheme.of(context).themeId);
+    Color backgroundColor = isDarkTheme ? Colors.white : Colors.black;
+    Color foregroundColor = isDarkTheme ? Colors.black : Colors.white;
+
     return Container(
       width: 50,
       height: 300,
@@ -203,7 +208,7 @@ class _NotePageState extends State<NotePage> {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.black.withOpacity(0.5),
+                color: backgroundColor.withOpacity(0.5),
               ),
             )),
           ),
@@ -211,14 +216,14 @@ class _NotePageState extends State<NotePage> {
             width: 50,
             height: 200,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
+              color: backgroundColor.withOpacity(0.3),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Center(
               child: Container(
                 width: 15,
                 height: 150,
-                color: Colors.white.withOpacity(0.5),
+                color: foregroundColor.withOpacity(0.5),
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: 15,
@@ -235,7 +240,7 @@ class _NotePageState extends State<NotePage> {
               child: Icon(
                 icon,
                 size: 30,
-                color: Colors.black.withOpacity(0.5),
+                color: backgroundColor.withOpacity(0.5),
               ),
             ),
           ),
