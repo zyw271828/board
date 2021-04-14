@@ -29,6 +29,18 @@ class LocalStorageService {
     return notes;
   }
 
+  static Future<double> loadScreenBrightness() async {
+    double screenBrightness;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    screenBrightness = prefs.getDouble('screenBrightness');
+
+    if (screenBrightness == null) {
+      return -1.0;
+    } else {
+      return screenBrightness;
+    }
+  }
+
   static saveNote(List<Note> notes) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -45,5 +57,11 @@ class LocalStorageService {
       prefs.setString('note' + i.toString(), json);
     }
     prefs.setInt('numberOfNotes', numberOfNotes);
+  }
+
+  static saveScreenBrightness(double screenBrightness) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setDouble('screenBrightness', screenBrightness);
   }
 }

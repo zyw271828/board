@@ -1,8 +1,10 @@
 import 'package:board/models/note.dart';
+import 'package:board/services/local_storage_service.dart';
 import 'package:flutter/services.dart';
+import 'package:screen/screen.dart';
 
 class Helper {
-  static void enterDisplayMode() {
+  static Future<void> enterDisplayMode() async {
     // Enter landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -10,13 +12,19 @@ class Helper {
     ]);
 
     enterFullscreenMode();
+
+    Screen.setBrightness(await LocalStorageService.loadScreenBrightness());
   }
 
   static void enterFullscreenMode() {
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-  static void exitDisplayMode() {
+  static Future<void> exitDisplayMode() async {
+    LocalStorageService.saveScreenBrightness(await Screen.brightness);
+    // Restore system screen brightness
+    Screen.setBrightness(-1);
+
     exitFullscreenMode();
 
     // Enter portrait mode
