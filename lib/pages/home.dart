@@ -281,7 +281,7 @@ class _HomePageState extends State<HomePage>
               constraints: BoxConstraints(minHeight: 50),
               alignment: Alignment.centerRight,
               child: Icon(
-                Icons.drag_handle,
+                _isSearchButtonPressed ? null : Icons.drag_handle,
                 color: Theme.of(context).accentTextTheme.bodyText1.color,
               ),
               padding: const EdgeInsets.all(8.0),
