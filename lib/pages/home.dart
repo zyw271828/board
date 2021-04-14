@@ -142,11 +142,24 @@ class _HomePageState extends State<HomePage>
                 ),
               )
             : Center(
-                child: ListView.builder(
+                child: ReorderableListView.builder(
+                  buildDefaultDragHandles: false,
                   padding: const EdgeInsets.all(8.0),
                   itemCount: notes.length,
                   itemBuilder: (BuildContext context, int index) {
                     return _generateNoteDismissible(notes, index);
+                  },
+                  onReorder: (int oldIndex, int newIndex) {
+                    setState(() {
+                      if (oldIndex < newIndex) {
+                        newIndex -= 1;
+                      }
+                      var note = notes.removeAt(oldIndex);
+                      notes.insert(newIndex, note);
+                      Helper.updateColorCodes(notes);
+                    });
+
+                    LocalStorageService.saveNote(notes);
                   },
                 ),
               ),
@@ -239,30 +252,46 @@ class _HomePageState extends State<HomePage>
     }
 
     return Container(
-      constraints: BoxConstraints(minHeight: 50),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all<Color>(swatch[notes[index].colorCode]),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  swatch[notes[index].colorCode]),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+            ),
+            child: Container(
+              constraints: BoxConstraints(minHeight: 50),
+              child: Center(child: Text(notes[index].content)),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+            ),
+            onPressed: () => _showNote(notes[index]),
+            onLongPress: () =>
+                _isSearchButtonPressed ? null : _editNote(notes, index),
+          ),
+          ReorderableDragStartListener(
+            index: index,
+            child: Container(
+              constraints: BoxConstraints(minHeight: 50),
+              alignment: Alignment.centerRight,
+              child: Icon(Icons.drag_handle),
+              padding: const EdgeInsets.all(8.0),
             ),
           ),
-        ),
-        child: Container(
-            child: Center(child: Text(notes[index].content)),
-            padding: const EdgeInsets.all(8.0)),
-        onPressed: () => _showNote(notes[index]),
-        onLongPress: () =>
-            _isSearchButtonPressed ? null : _editNote(notes, index),
+        ],
       ),
     );
   }
 
   Dismissible _generateNoteDismissible(List<Note> notes, int index) {
     return Dismissible(
-      key: UniqueKey(),
+      key: ObjectKey(notes[index]),
       dismissThresholds: <DismissDirection, double>{
         DismissDirection.startToEnd: 0.4,
         DismissDirection.endToStart: 1.0,
