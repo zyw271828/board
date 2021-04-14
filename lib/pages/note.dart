@@ -69,7 +69,16 @@ class _NotePageState extends State<NotePage> {
             ),
             Center(
               child: GestureDetector(
-                onTap: () => setState(() => _showAppBar = !_showAppBar),
+                onTap: () {
+                  if (_showAppBar) {
+                    Helper.enterFullscreenMode();
+                  } else {
+                    Helper.exitFullscreenMode();
+                  }
+                  setState(() {
+                    _showAppBar = !_showAppBar;
+                  });
+                },
                 onScaleStart: (details) {
                   _baseScaleFactor = _scaleFactor;
                 },

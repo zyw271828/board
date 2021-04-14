@@ -9,18 +9,24 @@ class Helper {
       DeviceOrientation.landscapeRight,
     ]);
 
-    // Enter fullscreen mode
+    enterFullscreenMode();
+  }
+
+  static void enterFullscreenMode() {
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
   static void exitDisplayMode() {
+    exitFullscreenMode();
+
     // Enter portrait mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
     ]);
+  }
 
-    // Exit fullscreen mode
+  static void exitFullscreenMode() {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
 
