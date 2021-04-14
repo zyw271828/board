@@ -92,11 +92,15 @@ class _NotePageState extends State<NotePage> {
                 },
                 // onScaleEnd: (details) async {
                 //   // https://github.com/flutter/flutter/issues/13102
-                //   await Future.delayed(const Duration(seconds: 1), () {
-                //     setState(() {
-                //       _showFontSizeIndicator = false;
+                //   try {
+                //     await Future.delayed(const Duration(seconds: 1), () {
+                //       setState(() {
+                //         _showFontSizeIndicator = false;
+                //       });
                 //     });
-                //   });
+                //   } on FlutterError catch (e) {
+                //     debugPrint(e.message);
+                //   }
                 // },
               ),
             ),
@@ -139,11 +143,16 @@ class _NotePageState extends State<NotePage> {
                           }
                         },
                         onVerticalDragEnd: (details) async {
-                          await Future.delayed(const Duration(seconds: 1), () {
-                            setState(() {
-                              _showBrightnessIndicator = false;
+                          try {
+                            await Future.delayed(const Duration(seconds: 1),
+                                () {
+                              setState(() {
+                                _showBrightnessIndicator = false;
+                              });
                             });
-                          });
+                          } on FlutterError catch (e) {
+                            debugPrint(e.message);
+                          }
                         },
                       ),
                     ],
@@ -174,11 +183,16 @@ class _NotePageState extends State<NotePage> {
                           });
                         },
                         onVerticalDragEnd: (details) async {
-                          await Future.delayed(const Duration(seconds: 1), () {
-                            setState(() {
-                              _showFontSizeIndicator = false;
+                          try {
+                            await Future.delayed(const Duration(seconds: 1),
+                                () {
+                              setState(() {
+                                _showFontSizeIndicator = false;
+                              });
                             });
-                          });
+                          } on FlutterError catch (e) {
+                            debugPrint(e.message);
+                          }
                         },
                       ),
                     ],
