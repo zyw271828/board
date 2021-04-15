@@ -2,6 +2,7 @@ import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key key}) : super(key: key);
@@ -15,7 +16,7 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     final drawerHeader = UserAccountsDrawerHeader(
       accountName: Text(
-        'Board',
+        AppLocalizations.of(context).appName,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       accountEmail: Text('A Display Board.'),
@@ -27,12 +28,12 @@ class _NavDrawerState extends State<NavDrawer> {
       children: [
         drawerHeader,
         ListTile(
-          title: Text('Theme'),
+          title: Text(AppLocalizations.of(context).theme),
           leading: const Icon(Icons.color_lens),
           onTap: () => _showThemeChangeDialog(),
         ),
         ListTile(
-          title: Text('Donate'),
+          title: Text(AppLocalizations.of(context).donate),
           leading: const Icon(Icons.payment),
           onTap: () {
             // TODO: add donate dialog
@@ -40,7 +41,7 @@ class _NavDrawerState extends State<NavDrawer> {
           },
         ),
         ListTile(
-          title: Text('Share'),
+          title: Text(AppLocalizations.of(context).share),
           leading: const Icon(Icons.share),
           onTap: () {
             // TODO: add share dialog
@@ -48,7 +49,7 @@ class _NavDrawerState extends State<NavDrawer> {
           },
         ),
         ListTile(
-          title: Text('About'),
+          title: Text(AppLocalizations.of(context).about),
           leading: const Icon(Icons.info),
           onTap: () {
             // TODO: add about dialog
@@ -99,7 +100,7 @@ class _NavDrawerState extends State<NavDrawer> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: Text('Change Theme'),
+          title: Text(AppLocalizations.of(context).changeTheme),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(8.0),

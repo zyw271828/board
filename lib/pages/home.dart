@@ -6,11 +6,10 @@ import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 
 class HomePage extends StatefulWidget {
-  final String title;
-
-  const HomePage({Key key, this.title}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage>
                       icon: AnimatedIcons.menu_arrow,
                       progress: _animationController,
                     ),
-                    tooltip: 'Back',
+                    tooltip: AppLocalizations.of(context).back,
                     onPressed: () {
                       _playAnimation();
                       _exitSearchMode();
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage>
                         color:
                             Theme.of(context).accentTextTheme.bodyText1.color),
                     decoration: InputDecoration(
-                      hintText: 'Search Note',
+                      hintText: AppLocalizations.of(context).searchNote,
                       hintStyle: TextStyle(
                           color: Theme.of(context)
                               .accentTextTheme
@@ -81,21 +80,21 @@ class _HomePageState extends State<HomePage>
                 ),
               )
             : AppBar(
-                title: Text(widget.title),
+                title: Text(AppLocalizations.of(context).appName),
                 leading: Builder(
                   builder: (context) => IconButton(
                     icon: AnimatedIcon(
                       icon: AnimatedIcons.menu_arrow,
                       progress: _animationController,
                     ),
-                    tooltip: 'Menu',
+                    tooltip: AppLocalizations.of(context).menu,
                     onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
                 ),
                 actions: <Widget>[
                   new IconButton(
                     icon: const Icon(Icons.search),
-                    tooltip: 'Search',
+                    tooltip: AppLocalizations.of(context).search,
                     onPressed: () {
                       _playAnimation();
                       setState(() {
@@ -107,9 +106,12 @@ class _HomePageState extends State<HomePage>
                   ),
                   new PopupMenuButton(
                     icon: const Icon(Icons.more_vert),
-                    tooltip: 'More',
+                    tooltip: AppLocalizations.of(context).more,
                     itemBuilder: (BuildContext context) {
-                      return {'About', 'Exit'}.map((String choice) {
+                      return {
+                        AppLocalizations.of(context).about,
+                        AppLocalizations.of(context).exit
+                      }.map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
                           child: Text(choice),
@@ -117,14 +119,11 @@ class _HomePageState extends State<HomePage>
                       }).toList();
                     },
                     onSelected: (choice) {
-                      switch (choice) {
-                        case 'About':
-                          // TODO: add about dialog
-                          break;
-                        case 'Exit':
-                          SystemChannels.platform
-                              .invokeMethod('SystemNavigator.pop');
-                          break;
+                      if (choice == AppLocalizations.of(context).about) {
+                        // TODO: add about dialog
+                      } else if (choice == AppLocalizations.of(context).exit) {
+                        SystemChannels.platform
+                            .invokeMethod('SystemNavigator.pop');
                       }
                     },
                   ),
@@ -167,7 +166,7 @@ class _HomePageState extends State<HomePage>
             ? null
             : FloatingActionButton(
                 onPressed: () => _addNote(notes),
-                tooltip: 'Add a note',
+                tooltip: AppLocalizations.of(context).addANote,
                 child: Icon(Icons.add),
               ),
         drawer: _isSearchButtonPressed ? null : NavDrawer(),
@@ -194,8 +193,10 @@ class _HomePageState extends State<HomePage>
   }
 
   void _addNote(List<Note> notes) async {
-    Note newNote =
-        await _showTextEditDialog('New Note', 'Note', Note(null, 900));
+    Note newNote = await _showTextEditDialog(
+        AppLocalizations.of(context).newNote,
+        AppLocalizations.of(context).note,
+        Note(null, 900));
 
     if (newNote.content != null) {
       setState(() {
@@ -220,8 +221,10 @@ class _HomePageState extends State<HomePage>
   }
 
   void _editNote(List<Note> notes, int index) async {
-    Note editedNote =
-        await _showTextEditDialog('Edit Note', 'Note', notes[index]);
+    Note editedNote = await _showTextEditDialog(
+        AppLocalizations.of(context).editNote,
+        AppLocalizations.of(context).note,
+        notes[index]);
 
     setState(() {
       notes[index] = editedNote;
@@ -304,9 +307,10 @@ class _HomePageState extends State<HomePage>
           Note deletedNote = _deleteNote(notes, index);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("${deletedNote.content} deleted"),
+              content: Text("${deletedNote.content} " +
+                  AppLocalizations.of(context).deleted),
               action: SnackBarAction(
-                label: "UNDO",
+                label: AppLocalizations.of(context).undo,
                 onPressed: () {
                   _undoDeleteNote(deletedNote, notes, index);
                 },
@@ -405,10 +409,10 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      child: Text('Cancel'),
+                      child: Text(AppLocalizations.of(context).cancel),
                       onPressed: () => {Navigator.pop(context, prefilledNote)}),
                   TextButton(
-                      child: Text('Save'),
+                      child: Text(AppLocalizations.of(context).save),
                       onPressed: () => {
                             Navigator.pop(context,
                                 Note(_controller.text, prefilledNote.colorCode))

@@ -5,6 +5,7 @@ import 'package:board/models/note.dart';
 import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
@@ -50,6 +51,7 @@ class _NotePageState extends State<NotePage> {
                   builder: (BuildContext context) {
                     return IconButton(
                       icon: const Icon(Icons.arrow_back),
+                      tooltip: AppLocalizations.of(context).back,
                       onPressed: () {
                         Helper.exitDisplayMode();
                         Navigator.of(context).pop();
@@ -63,8 +65,8 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.stay_primary_landscape
                         : Icons.stay_primary_portrait),
                     tooltip: _isRotateButtonPressed
-                        ? 'Landscape mode'
-                        : 'Portrait mode',
+                        ? AppLocalizations.of(context).landscapeMode
+                        : AppLocalizations.of(context).portraitMode,
                     onPressed: () {
                       if (_isRotateButtonPressed) {
                         Helper.enterLandscapeMode();
@@ -79,8 +81,8 @@ class _NotePageState extends State<NotePage> {
                   IconButton(
                     icon: Icon(Icons.sync_alt),
                     tooltip: _isMarkdownButtonPressed
-                        ? 'Plain text mode'
-                        : 'Markdown mode',
+                        ? AppLocalizations.of(context).plainTextMode
+                        : AppLocalizations.of(context).markdownMode,
                     onPressed: () {
                       setState(() {
                         _isMarkdownButtonPressed = !_isMarkdownButtonPressed;
@@ -91,8 +93,9 @@ class _NotePageState extends State<NotePage> {
                     icon: Icon(_isQRcodeButtonPressed
                         ? Icons.text_snippet
                         : Icons.qr_code),
-                    tooltip:
-                        _isQRcodeButtonPressed ? 'Text mode' : 'QRcode mode',
+                    tooltip: _isQRcodeButtonPressed
+                        ? AppLocalizations.of(context).textMode
+                        : AppLocalizations.of(context).qrcodeMode,
                     onPressed: () {
                       setState(() {
                         _isQRcodeButtonPressed = !_isQRcodeButtonPressed;
