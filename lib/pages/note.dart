@@ -39,7 +39,10 @@ class _NotePageState extends State<NotePage> {
       child: Scaffold(
         appBar: _showAppBar
             ? AppBar(
-                title: Text(widget.note.content),
+                title: Text(
+                  widget.note.content,
+                  maxLines: 1,
+                ),
                 leading: Builder(
                   builder: (BuildContext context) {
                     return IconButton(
