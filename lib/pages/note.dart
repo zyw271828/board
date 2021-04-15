@@ -5,6 +5,7 @@ import 'package:board/models/note.dart';
 import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
 
@@ -25,6 +26,7 @@ class _NotePageState extends State<NotePage> {
   bool _showFontSizeIndicator = false;
   bool _showBrightnessIndicator = false;
   bool _isQRcodeButtonPressed = false;
+  bool _isMarkdownButtonPressed = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
@@ -56,9 +58,22 @@ class _NotePageState extends State<NotePage> {
                 ),
                 actions: <Widget>[
                   IconButton(
+                    icon: Icon(Icons.sync_alt),
+                    tooltip: _isMarkdownButtonPressed
+                        ? 'Markdown Mode'
+                        : 'Plain Text Mode',
+                    onPressed: () {
+                      setState(() {
+                        _isMarkdownButtonPressed = !_isMarkdownButtonPressed;
+                      });
+                    },
+                  ),
+                  IconButton(
                     icon: Icon(_isQRcodeButtonPressed
                         ? Icons.text_snippet
                         : Icons.qr_code),
+                    tooltip:
+                        _isQRcodeButtonPressed ? 'QRcode Mode' : 'Text Mode',
                     onPressed: () {
                       setState(() {
                         _isQRcodeButtonPressed = !_isQRcodeButtonPressed;
@@ -75,22 +90,7 @@ class _NotePageState extends State<NotePage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(50.0),
                 scrollDirection: Axis.vertical,
-                child: _isQRcodeButtonPressed
-                    ? QrImage(
-                        data: widget.note.content,
-                        size: min(MediaQuery.of(context).size.height,
-                                MediaQuery.of(context).size.width) -
-                            100,
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white,
-                      )
-                    : Text(
-                        widget.note.content,
-                        textScaleFactor: _scaleFactor,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _noteFontSize),
-                      ),
+                child: _generateDisplayWidget(),
               ),
             ),
             Center(
@@ -230,6 +230,32 @@ class _NotePageState extends State<NotePage> {
         ),
       ),
     );
+  }
+
+  Widget _generateDisplayWidget() {
+    if (_isQRcodeButtonPressed) {
+      return QrImage(
+        data: widget.note.content,
+        size: min(MediaQuery.of(context).size.height,
+                MediaQuery.of(context).size.width) -
+            100,
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
+      );
+    } else if (_isMarkdownButtonPressed) {
+      return MarkdownBody(
+        data: widget.note.content,
+        styleSheet: MarkdownStyleSheet(
+          textScaleFactor: _scaleFactor,
+        ),
+      );
+    } else {
+      return Text(
+        widget.note.content,
+        textScaleFactor: _scaleFactor,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: _noteFontSize),
+      );
+    }
   }
 
   Container _generateIndicatorContainer(

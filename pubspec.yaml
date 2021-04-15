@@ -29,6 +29,7 @@ dependencies:
   dynamic_themes: ^1.1.0
   wakelock: ^0.5.0+2
   qr_flutter: ^4.0.0
+  flutter_markdown: ^0.6.1
 
 
   # The following adds the Cupertino Icons font to your application.
