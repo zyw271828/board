@@ -1,5 +1,6 @@
 import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
+import 'package:board/widgets/board_widgets.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
@@ -19,7 +20,7 @@ class _NavDrawerState extends State<NavDrawer> {
         AppLocalizations.of(context).appName,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
-      accountEmail: Text('A Display Board.'),
+      accountEmail: Text(AppLocalizations.of(context).appDescription),
       currentAccountPicture: const CircleAvatar(
         foregroundImage: AssetImage('assets/images/icon-drawer.png'),
       ),
@@ -52,8 +53,12 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text(AppLocalizations.of(context).about),
           leading: const Icon(Icons.info),
           onTap: () {
-            // TODO: add about dialog
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BoardWidgets.generateAboutDialog();
+              },
+            );
           },
         ),
       ],

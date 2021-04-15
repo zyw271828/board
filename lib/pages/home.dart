@@ -3,6 +3,7 @@ import 'package:board/pages/drawer.dart';
 import 'package:board/pages/note.dart';
 import 'package:board/services/local_storage_service.dart';
 import 'package:board/utils/helper.dart';
+import 'package:board/widgets/board_widgets.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -120,7 +121,12 @@ class _HomePageState extends State<HomePage>
                     },
                     onSelected: (choice) {
                       if (choice == AppLocalizations.of(context).about) {
-                        // TODO: add about dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BoardWidgets.generateAboutDialog();
+                          },
+                        );
                       } else if (choice == AppLocalizations.of(context).exit) {
                         SystemChannels.platform
                             .invokeMethod('SystemNavigator.pop');
