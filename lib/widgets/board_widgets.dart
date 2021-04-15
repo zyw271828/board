@@ -1,5 +1,6 @@
 import 'package:board/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class BoardWidgets {
@@ -19,6 +20,51 @@ class BoardWidgets {
             _generatePackageInfoColumn(),
             SizedBox(width: 50),
           ],
+        ),
+      ],
+    );
+  }
+
+  static Widget generateDonateDialog(BuildContext context) {
+    // TODO: unfinished donate dialog
+    return SimpleDialog(
+      title: Text(AppLocalizations.of(context).donate),
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(AppLocalizations.of(context).donateDescription),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('\$ 0.00'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('\$ 0.00'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('\$ 0.00'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('\$ 0.00'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );

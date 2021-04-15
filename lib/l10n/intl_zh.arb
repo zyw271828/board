@@ -19,6 +19,7 @@
     "theme": "主题",
     "donate": "捐助",
     "share": "分享",
+    "donateDescription": "您的捐助可以让本项目获得很大的帮助。",
     "changeTheme": "更改主题",
     "blackAndWhiteMode": "黑白模式",
     "colorMode": "彩色模式",

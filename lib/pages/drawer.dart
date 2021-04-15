@@ -38,8 +38,12 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text(AppLocalizations.of(context).donate),
           leading: const Icon(Icons.payment),
           onTap: () {
-            // TODO: add donate dialog
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BoardWidgets.generateDonateDialog(context);
+              },
+            );
           },
         ),
         ListTile(
