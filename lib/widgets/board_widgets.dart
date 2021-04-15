@@ -1,4 +1,6 @@
+import 'package:board/themes/board_theme_data.dart';
 import 'package:board/utils/helper.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -67,6 +69,38 @@ class BoardWidgets {
           ),
         ),
       ],
+    );
+  }
+
+  static Container generateThemeColorContainer(
+      BuildContext context, int themeId) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        color: BoardThemeData.themeCollection[themeId].primaryColor,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          int currentThemeId = DynamicTheme.of(context).themeId;
+          if (Helper.isLightTheme(currentThemeId)) {
+            DynamicTheme.of(context).setTheme(themeId);
+          } else {
+            DynamicTheme.of(context)
+                .setTheme(Helper.generateDarkThemeId(themeId));
+          }
+        },
+        child: (themeId == DynamicTheme.of(context).themeId ||
+                Helper.generateDarkThemeId(themeId) ==
+                    DynamicTheme.of(context).themeId)
+            ? Icon(
+                Icons.check,
+                size: 30,
+                color: Colors.white,
+              )
+            : null,
+      ),
     );
   }
 

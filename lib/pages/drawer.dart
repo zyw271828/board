@@ -74,37 +74,6 @@ class _NavDrawerState extends State<NavDrawer> {
     );
   }
 
-  Container _generateThemeColorContainer(int themeId) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: BoardThemeData.themeCollection[themeId].primaryColor,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          int currentThemeId = DynamicTheme.of(context).themeId;
-          if (Helper.isLightTheme(currentThemeId)) {
-            DynamicTheme.of(context).setTheme(themeId);
-          } else {
-            DynamicTheme.of(context)
-                .setTheme(Helper.generateDarkThemeId(themeId));
-          }
-        },
-        child: (themeId == DynamicTheme.of(context).themeId ||
-                Helper.generateDarkThemeId(themeId) ==
-                    DynamicTheme.of(context).themeId)
-            ? Icon(
-                Icons.check,
-                size: 30,
-                color: Colors.white,
-              )
-            : null,
-      ),
-    );
-  }
-
   _showThemeChangeDialog() {
     return showDialog<MaterialColor>(
       context: context,
@@ -119,20 +88,28 @@ class _NavDrawerState extends State<NavDrawer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      _generateThemeColorContainer(BoardThemeData.pink),
-                      _generateThemeColorContainer(BoardThemeData.red),
-                      _generateThemeColorContainer(BoardThemeData.orange),
-                      _generateThemeColorContainer(BoardThemeData.yellow),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.pink),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.red),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.orange),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.yellow),
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      _generateThemeColorContainer(BoardThemeData.green),
-                      _generateThemeColorContainer(BoardThemeData.teal),
-                      _generateThemeColorContainer(BoardThemeData.blue),
-                      _generateThemeColorContainer(BoardThemeData.purple),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.green),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.teal),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.blue),
+                      BoardWidgets.generateThemeColorContainer(
+                          context, BoardThemeData.purple),
                     ],
                   ),
                   SizedBox(height: 10),
