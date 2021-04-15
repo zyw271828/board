@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:board/models/note.dart';
 import 'package:board/utils/helper.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
 
 class NotePage extends StatefulWidget {
@@ -22,6 +24,7 @@ class _NotePageState extends State<NotePage> {
   bool _showAppBar = false;
   bool _showFontSizeIndicator = false;
   bool _showBrightnessIndicator = false;
+  bool _isQRcodeButtonPressed = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
@@ -48,6 +51,18 @@ class _NotePageState extends State<NotePage> {
                     );
                   },
                 ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(_isQRcodeButtonPressed
+                        ? Icons.text_snippet
+                        : Icons.qr_code),
+                    onPressed: () {
+                      setState(() {
+                        _isQRcodeButtonPressed = !_isQRcodeButtonPressed;
+                      });
+                    },
+                  ),
+                ],
               )
             : null,
         body: Stack(
@@ -57,12 +72,22 @@ class _NotePageState extends State<NotePage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(50.0),
                 scrollDirection: Axis.vertical,
-                child: Text(
-                  widget.note.content,
-                  textScaleFactor: _scaleFactor,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: _noteFontSize),
-                ),
+                child: _isQRcodeButtonPressed
+                    ? QrImage(
+                        data: widget.note.content,
+                        size: min(MediaQuery.of(context).size.height,
+                                MediaQuery.of(context).size.width) -
+                            100,
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.white,
+                      )
+                    : Text(
+                        widget.note.content,
+                        textScaleFactor: _scaleFactor,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _noteFontSize),
+                      ),
               ),
             ),
             Center(
