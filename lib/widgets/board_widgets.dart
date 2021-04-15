@@ -1,3 +1,4 @@
+import 'package:board/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -25,7 +26,7 @@ class BoardWidgets {
 
   static _generatePackageInfoColumn() {
     return FutureBuilder<PackageInfo>(
-      future: _getPackageInfo(),
+      future: Helper.getPackageInfo(),
       builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
         List<Widget> children;
 
@@ -61,10 +62,5 @@ class BoardWidgets {
         );
       },
     );
-  }
-
-  static Future<PackageInfo> _getPackageInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    return packageInfo;
   }
 }

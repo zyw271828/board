@@ -4,6 +4,7 @@ import 'package:board/widgets/board_widgets.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
+import 'package:share/share.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key key}) : super(key: key);
@@ -44,9 +45,9 @@ class _NavDrawerState extends State<NavDrawer> {
         ListTile(
           title: Text(AppLocalizations.of(context).share),
           leading: const Icon(Icons.share),
-          onTap: () {
-            // TODO: add share dialog
-            Navigator.pop(context);
+          onTap: () async {
+            Share.share('https://play.google.com/store/apps/details?id=' +
+                await Helper.getPackageName());
           },
         ),
         ListTile(

@@ -1,6 +1,7 @@
 import 'package:board/models/note.dart';
 import 'package:board/services/local_storage_service.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screen/screen.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -69,6 +70,16 @@ class Helper {
 
   static int generateLightThemeId(int darkThemeId) {
     return isDarkTheme(darkThemeId) ? (darkThemeId - 100) : null;
+  }
+
+  static Future<PackageInfo> getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo;
+  }
+
+  static Future<String> getPackageName() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.packageName;
   }
 
   static bool isDarkTheme(int themeId) {
