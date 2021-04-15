@@ -2,6 +2,7 @@ import 'package:board/models/note.dart';
 import 'package:board/services/local_storage_service.dart';
 import 'package:flutter/services.dart';
 import 'package:screen/screen.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Helper {
   static Future<void> enterDisplayMode() async {
@@ -13,7 +14,16 @@ class Helper {
 
     enterFullscreenMode();
 
-    Screen.setBrightness(await LocalStorageService.loadScreenBrightness());
+    try {
+      Wakelock.enable();
+      Screen.setBrightness(await LocalStorageService.loadScreenBrightness());
+    } on PlatformException catch (e) {
+      // Waiting for wakelock to support Linux
+      // https://github.com/creativecreatorormaybenot/wakelock/issues/97
+      print(e.message);
+    } on MissingPluginException catch (e) {
+      print(e.message);
+    }
   }
 
   static void enterFullscreenMode() {
@@ -21,9 +31,18 @@ class Helper {
   }
 
   static Future<void> exitDisplayMode() async {
-    LocalStorageService.saveScreenBrightness(await Screen.brightness);
-    // Restore system screen brightness
-    Screen.setBrightness(-1);
+    try {
+      LocalStorageService.saveScreenBrightness(await Screen.brightness);
+      // Restore system screen brightness
+      Screen.setBrightness(-1);
+      Wakelock.disable();
+    } on MissingPluginException catch (e) {
+      print(e.message);
+    } on PlatformException catch (e) {
+      // Waiting for wakelock to support Linux
+      // https://github.com/creativecreatorormaybenot/wakelock/issues/97
+      print(e.message);
+    }
 
     exitFullscreenMode();
 
