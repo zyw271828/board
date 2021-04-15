@@ -29,6 +29,7 @@ class _NotePageState extends State<NotePage> {
   bool _isQRcodeButtonPressed = false;
   bool _isMarkdownButtonPressed = false;
   bool _isRotateButtonPressed = false;
+  bool _isColorButtonPressed = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
@@ -60,6 +61,19 @@ class _NotePageState extends State<NotePage> {
                   },
                 ),
                 actions: <Widget>[
+                  IconButton(
+                    icon: Icon(_isColorButtonPressed
+                        ? Icons.color_lens_outlined
+                        : Icons.color_lens),
+                    tooltip: _isColorButtonPressed
+                        ? AppLocalizations.of(context).blackAndWhiteMode
+                        : AppLocalizations.of(context).colorMode,
+                    onPressed: () {
+                      setState(() {
+                        _isColorButtonPressed = !_isColorButtonPressed;
+                      });
+                    },
+                  ),
                   IconButton(
                     icon: Icon(_isRotateButtonPressed
                         ? Icons.stay_primary_landscape
@@ -107,6 +121,10 @@ class _NotePageState extends State<NotePage> {
             : null,
         body: Stack(
           children: [
+            Container(
+              color:
+                  _isColorButtonPressed ? Theme.of(context).accentColor : null,
+            ),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(50.0),
@@ -275,7 +293,13 @@ class _NotePageState extends State<NotePage> {
       return SelectableText(
         widget.note.content,
         textScaleFactor: _scaleFactor,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: _noteFontSize),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: _noteFontSize,
+          color: _isColorButtonPressed
+              ? Theme.of(context).accentTextTheme.bodyText1.color
+              : null,
+        ),
       );
     }
   }

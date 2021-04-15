@@ -20,6 +20,8 @@
     "donate": "Donate",
     "share": "Share",
     "changeTheme": "Change Theme",
+    "blackAndWhiteMode": "Black & white mode",
+    "colorMode": "Color mode",
     "landscapeMode": "Landscape mode",
     "portraitMode": "Portrait mode",
     "plainTextMode": "Plain text mode",
