@@ -63,8 +63,8 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.stay_primary_landscape
                         : Icons.stay_primary_portrait),
                     tooltip: _isRotateButtonPressed
-                        ? 'Landscape Mode'
-                        : 'Portrait Mode',
+                        ? 'Landscape mode'
+                        : 'Portrait mode',
                     onPressed: () {
                       if (_isRotateButtonPressed) {
                         Helper.enterLandscapeMode();
@@ -79,8 +79,8 @@ class _NotePageState extends State<NotePage> {
                   IconButton(
                     icon: Icon(Icons.sync_alt),
                     tooltip: _isMarkdownButtonPressed
-                        ? 'Markdown Mode'
-                        : 'Plain Text Mode',
+                        ? 'Plain text mode'
+                        : 'Markdown mode',
                     onPressed: () {
                       setState(() {
                         _isMarkdownButtonPressed = !_isMarkdownButtonPressed;
@@ -92,7 +92,7 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.text_snippet
                         : Icons.qr_code),
                     tooltip:
-                        _isQRcodeButtonPressed ? 'QRcode Mode' : 'Text Mode',
+                        _isQRcodeButtonPressed ? 'Text mode' : 'QRcode mode',
                     onPressed: () {
                       setState(() {
                         _isQRcodeButtonPressed = !_isQRcodeButtonPressed;
