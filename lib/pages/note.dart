@@ -245,12 +245,13 @@ class _NotePageState extends State<NotePage> {
     } else if (_isMarkdownButtonPressed) {
       return MarkdownBody(
         data: widget.note.content,
+        selectable: true,
         styleSheet: MarkdownStyleSheet(
           textScaleFactor: _scaleFactor,
         ),
       );
     } else {
-      return Text(
+      return SelectableText(
         widget.note.content,
         textScaleFactor: _scaleFactor,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: _noteFontSize),
