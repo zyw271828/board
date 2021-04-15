@@ -27,6 +27,7 @@ class _NotePageState extends State<NotePage> {
   bool _showBrightnessIndicator = false;
   bool _isQRcodeButtonPressed = false;
   bool _isMarkdownButtonPressed = false;
+  bool _isRotateButtonPressed = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
@@ -57,6 +58,24 @@ class _NotePageState extends State<NotePage> {
                   },
                 ),
                 actions: <Widget>[
+                  IconButton(
+                    icon: Icon(_isRotateButtonPressed
+                        ? Icons.stay_primary_landscape
+                        : Icons.stay_primary_portrait),
+                    tooltip: _isRotateButtonPressed
+                        ? 'Landscape Mode'
+                        : 'Portrait Mode',
+                    onPressed: () {
+                      if (_isRotateButtonPressed) {
+                        Helper.enterLandscapeMode();
+                      } else {
+                        Helper.enterPortraitMode();
+                      }
+                      setState(() {
+                        _isRotateButtonPressed = !_isRotateButtonPressed;
+                      });
+                    },
+                  ),
                   IconButton(
                     icon: Icon(Icons.sync_alt),
                     tooltip: _isMarkdownButtonPressed

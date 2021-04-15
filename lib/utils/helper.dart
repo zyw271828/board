@@ -6,11 +6,7 @@ import 'package:wakelock/wakelock.dart';
 
 class Helper {
   static Future<void> enterDisplayMode() async {
-    // Enter landscape mode
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    enterLandscapeMode();
 
     enterFullscreenMode();
 
@@ -30,6 +26,20 @@ class Helper {
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
+  static void enterLandscapeMode() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  static void enterPortraitMode() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   static Future<void> exitDisplayMode() async {
     try {
       LocalStorageService.saveScreenBrightness(await Screen.brightness);
@@ -46,11 +56,7 @@ class Helper {
 
     exitFullscreenMode();
 
-    // Enter portrait mode
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
+    unlockScreenRotation();
   }
 
   static void exitFullscreenMode() {
@@ -71,6 +77,15 @@ class Helper {
 
   static bool isLightTheme(int themeId) {
     return themeId < 100;
+  }
+
+  static void unlockScreenRotation() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 
   static void updateColorCodes(List<Note> notes) {
