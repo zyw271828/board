@@ -300,10 +300,11 @@ class _HomePageState extends State<HomePage>
       key: ObjectKey(notes[index]),
       dismissThresholds: <DismissDirection, double>{
         DismissDirection.startToEnd: 0.4,
-        DismissDirection.endToStart: 1.0,
+        DismissDirection.endToStart: 0.4,
       },
       onDismissed: (direction) {
-        if (direction == DismissDirection.startToEnd) {
+        if (direction == DismissDirection.startToEnd ||
+            direction == DismissDirection.endToStart) {
           Note deletedNote = _deleteNote(notes, index);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -317,11 +318,6 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           );
-        } else if (direction == DismissDirection.endToStart) {
-          // TODO: sliding to star note
-          setState(() {
-            notes = notes;
-          });
         }
       },
       background: Container(
@@ -335,10 +331,10 @@ class _HomePageState extends State<HomePage>
       ),
       secondaryBackground: Container(
         padding: const EdgeInsets.all(8.0),
-        color: Colors.orange,
+        color: Colors.red,
         alignment: Alignment.centerRight,
         child: Icon(
-          Icons.star,
+          Icons.delete,
           color: Colors.white,
         ),
       ),

@@ -106,7 +106,6 @@ class _NotePageState extends State<NotePage> {
               )
             : null,
         body: Stack(
-          // TODO: horizontal drag gesture to change note color
           children: [
             Center(
               child: SingleChildScrollView(
