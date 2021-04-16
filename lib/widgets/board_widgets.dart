@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class BoardWidgets {
-  static Widget generateAboutDialog() {
+  static Widget generateAboutDialog(BuildContext context) {
     return SimpleDialog(
       children: <Widget>[
         Row(
@@ -17,6 +17,7 @@ class BoardWidgets {
               height: 50,
               child: CircleAvatar(
                 foregroundImage: AssetImage('assets/images/icon-drawer.png'),
+                backgroundColor: Theme.of(context).accentColor,
               ),
             ),
             _generatePackageInfoColumn(),

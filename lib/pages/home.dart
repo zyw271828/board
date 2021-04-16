@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage>
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return BoardWidgets.generateAboutDialog();
+                            return BoardWidgets.generateAboutDialog(context);
                           },
                         );
                       } else if (choice == AppLocalizations.of(context).exit) {

@@ -61,7 +61,7 @@ class _NavDrawerState extends State<NavDrawer> {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return BoardWidgets.generateAboutDialog();
+                return BoardWidgets.generateAboutDialog(context);
               },
             );
           },
