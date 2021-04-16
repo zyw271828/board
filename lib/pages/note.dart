@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
+import 'package:share/share.dart';
 
 class NotePage extends StatefulWidget {
   final Note note;
@@ -61,6 +62,13 @@ class _NotePageState extends State<NotePage> {
                   },
                 ),
                 actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.share),
+                    tooltip: AppLocalizations.of(context).share,
+                    onPressed: () {
+                      Share.share(widget.note.content);
+                    },
+                  ),
                   IconButton(
                     icon: Icon(_isColorButtonPressed
                         ? Icons.color_lens_outlined
