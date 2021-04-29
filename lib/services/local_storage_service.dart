@@ -18,12 +18,14 @@ class LocalStorageService {
       }
     } else {
       notes = <Note>[
-        Note('Note A', 900),
-        Note('Note B', 800),
-        Note('Note C', 700),
-        Note('Note D', 600),
-        Note('Note E', 500),
-        Note('Note F', 400),
+        Note('john.smith@example.com', 900),
+        Note('+1 (123) 456-7891', 800),
+        Note(
+            '1 Montgomery Street,\nSuite 1600, San Francisco,\nCalifornia 94104',
+            700),
+        Note('https://www.example.com/', 600),
+        Note('PGP: 1234 5678 9ABC\nDEF1 2345 6789 ABCD\nEF12 3456 789A', 500),
+        Note('Support **Markdown**', 400),
       ];
     }
     return notes;
