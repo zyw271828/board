@@ -23,7 +23,7 @@ class LocalStorageService {
         Note(
             '1 Montgomery Street,\nSuite 1600, San Francisco,\nCalifornia 94104',
             700),
-        Note('https://www.example.com/', 600),
+        Note('https://www.example.com', 600),
         Note('PGP: 1234 5678 9ABC\nDEF1 2345 6789 ABCD\nEF12 3456 789A', 500),
         Note('Support **Markdown**', 400),
       ];
