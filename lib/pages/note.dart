@@ -166,6 +166,25 @@ class _NotePageState extends State<NotePage> {
                         (_scaleFactor * (_indicatorLevel / 3)).toInt();
                   });
                 },
+                onHorizontalDragEnd: (details) {
+                  if (details.velocity.pixelsPerSecond.dx > 0) {
+                    setState(() {
+                      if (_index <= 0) {
+                        _index = widget.notes.length - 1;
+                      } else {
+                        _index--;
+                      }
+                    });
+                  } else if (details.velocity.pixelsPerSecond.dx < 0) {
+                    setState(() {
+                      if (_index >= widget.notes.length - 1) {
+                        _index = 0;
+                      } else {
+                        _index++;
+                      }
+                    });
+                  }
+                },
                 // onScaleEnd: (details) async {
                 //   // https://github.com/flutter/flutter/issues/13102
                 //   try {
