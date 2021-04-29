@@ -23,7 +23,7 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> {
-  double _noteFontSize = 80;
+  double _noteFontSize = 60;
   double _baseScaleFactor = 1;
   double _scaleFactor = 1;
   bool _showAppBar = false;
