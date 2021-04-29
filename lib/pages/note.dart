@@ -130,184 +130,182 @@ class _NotePageState extends State<NotePage> {
                 ],
               )
             : null,
-        body: AnimatedSwitcher(
-          duration: Duration(milliseconds: 450),
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              child: child,
-              opacity: animation,
-            );
-          },
-          child: Stack(
-            key: ObjectKey(widget.notes[_index]),
-            children: [
-              Container(
-                color: _isColorButtonPressed
-                    ? Theme.of(context).accentColor
-                    : null,
-              ),
-              Center(
+        body: Stack(
+          children: [
+            Container(
+              color:
+                  _isColorButtonPressed ? Theme.of(context).accentColor : null,
+            ),
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 450),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  child: child,
+                  opacity: animation,
+                );
+              },
+              child: Center(
+                key: ObjectKey(widget.notes[_index]),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(50.0),
                   scrollDirection: Axis.vertical,
                   child: _generateDisplayWidget(),
                 ),
               ),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    if (_showAppBar) {
-                      Helper.enterFullscreenMode();
-                    } else {
-                      Helper.exitFullscreenMode();
-                    }
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  if (_showAppBar) {
+                    Helper.enterFullscreenMode();
+                  } else {
+                    Helper.exitFullscreenMode();
+                  }
+                  setState(() {
+                    _showAppBar = !_showAppBar;
+                  });
+                },
+                onScaleStart: (details) {
+                  _baseScaleFactor = _scaleFactor;
+                },
+                onScaleUpdate: (details) {
+                  setState(() {
+                    // _showFontSizeIndicator = true;
+                    _scaleFactor = _baseScaleFactor * details.scale;
+                    _fontSizeIndicatorValue =
+                        (_scaleFactor * (_indicatorLevel / 3)).toInt();
+                  });
+                },
+                onHorizontalDragEnd: (details) {
+                  if (details.velocity.pixelsPerSecond.dx > 0) {
                     setState(() {
-                      _showAppBar = !_showAppBar;
+                      if (_index <= 0) {
+                        _index = widget.notes.length - 1;
+                      } else {
+                        _index--;
+                      }
                     });
-                  },
-                  onScaleStart: (details) {
-                    _baseScaleFactor = _scaleFactor;
-                  },
-                  onScaleUpdate: (details) {
+                  } else if (details.velocity.pixelsPerSecond.dx < 0) {
                     setState(() {
-                      // _showFontSizeIndicator = true;
-                      _scaleFactor = _baseScaleFactor * details.scale;
-                      _fontSizeIndicatorValue =
-                          (_scaleFactor * (_indicatorLevel / 3)).toInt();
+                      if (_index >= widget.notes.length - 1) {
+                        _index = 0;
+                      } else {
+                        _index++;
+                      }
                     });
-                  },
-                  onHorizontalDragEnd: (details) {
-                    if (details.velocity.pixelsPerSecond.dx > 0) {
-                      setState(() {
-                        if (_index <= 0) {
-                          _index = widget.notes.length - 1;
-                        } else {
-                          _index--;
-                        }
-                      });
-                    } else if (details.velocity.pixelsPerSecond.dx < 0) {
-                      setState(() {
-                        if (_index >= widget.notes.length - 1) {
-                          _index = 0;
-                        } else {
-                          _index++;
-                        }
-                      });
-                    }
-                  },
-                  // onScaleEnd: (details) async {
-                  //   // https://github.com/flutter/flutter/issues/13102
-                  //   try {
-                  //     await Future.delayed(const Duration(seconds: 1), () {
-                  //       setState(() {
-                  //         _showFontSizeIndicator = false;
-                  //       });
-                  //     });
-                  //   } on FlutterError catch (e) {
-                  //     debugPrint(e.message);
-                  //   }
-                  // },
-                ),
+                  }
+                },
+                // onScaleEnd: (details) async {
+                //   // https://github.com/flutter/flutter/issues/13102
+                //   try {
+                //     await Future.delayed(const Duration(seconds: 1), () {
+                //       setState(() {
+                //         _showFontSizeIndicator = false;
+                //       });
+                //     });
+                //   } on FlutterError catch (e) {
+                //     debugPrint(e.message);
+                //   }
+                // },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 100,
-                    height: MediaQuery.of(context).size.height,
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: AnimatedOpacity(
-                            opacity: _showFontSizeIndicator ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 500),
-                            child: _generateIndicatorContainer(
-                                _fontSizeIndicatorValue,
-                                Icons.format_size,
-                                Colors.purple),
-                          ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 100,
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AnimatedOpacity(
+                          opacity: _showFontSizeIndicator ? 1.0 : 0.0,
+                          duration: Duration(milliseconds: 500),
+                          child: _generateIndicatorContainer(
+                              _fontSizeIndicatorValue,
+                              Icons.format_size,
+                              Colors.purple),
                         ),
-                        GestureDetector(
-                          onVerticalDragUpdate: (details) async {
-                            setState(() {
-                              _showBrightnessIndicator = true;
-                            });
-                            if (Platform.isAndroid || Platform.isIOS) {
-                              double brightness = await Screen.brightness -
-                                  details.delta.dy / 500;
+                      ),
+                      GestureDetector(
+                        onVerticalDragUpdate: (details) async {
+                          setState(() {
+                            _showBrightnessIndicator = true;
+                          });
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            double brightness = await Screen.brightness -
+                                details.delta.dy / 500;
 
-                              if (brightness >= 0 && brightness <= 1) {
-                                Screen.setBrightness(brightness);
-                                setState(() {
-                                  // Brightness cannot reach 1, so we add 0.01 here
-                                  _brightnessIndicatorValue =
-                                      (brightness * (_indicatorLevel + 0.01))
-                                          .toInt();
-                                });
-                              }
-                            }
-                          },
-                          onVerticalDragEnd: (details) async {
-                            try {
-                              await Future.delayed(const Duration(seconds: 1),
-                                  () {
-                                setState(() {
-                                  _showBrightnessIndicator = false;
-                                });
+                            if (brightness >= 0 && brightness <= 1) {
+                              Screen.setBrightness(brightness);
+                              setState(() {
+                                // Brightness cannot reach 1, so we add 0.01 here
+                                _brightnessIndicatorValue =
+                                    (brightness * (_indicatorLevel + 0.01))
+                                        .toInt();
                               });
-                            } on FlutterError catch (e) {
-                              debugPrint(e.message);
                             }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: MediaQuery.of(context).size.height,
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: AnimatedOpacity(
-                            opacity: _showBrightnessIndicator ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 450),
-                            child: _generateIndicatorContainer(
-                                _brightnessIndicatorValue,
-                                Icons.brightness_6,
-                                Colors.orange),
-                          ),
-                        ),
-                        GestureDetector(
-                          onVerticalDragUpdate: (details) {
-                            setState(() {
-                              _showFontSizeIndicator = true;
-                              _scaleFactor *= 1 - details.delta.dy / 50;
-                              _fontSizeIndicatorValue =
-                                  (_scaleFactor * (_indicatorLevel / 3))
-                                      .toInt();
+                          }
+                        },
+                        onVerticalDragEnd: (details) async {
+                          try {
+                            await Future.delayed(const Duration(seconds: 1),
+                                () {
+                              setState(() {
+                                _showBrightnessIndicator = false;
+                              });
                             });
-                          },
-                          onVerticalDragEnd: (details) async {
-                            try {
-                              await Future.delayed(const Duration(seconds: 1),
-                                  () {
-                                setState(() {
-                                  _showFontSizeIndicator = false;
-                                });
-                              });
-                            } on FlutterError catch (e) {
-                              debugPrint(e.message);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                          } on FlutterError catch (e) {
+                            debugPrint(e.message);
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                Container(
+                  width: 100,
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AnimatedOpacity(
+                          opacity: _showBrightnessIndicator ? 1.0 : 0.0,
+                          duration: Duration(milliseconds: 450),
+                          child: _generateIndicatorContainer(
+                              _brightnessIndicatorValue,
+                              Icons.brightness_6,
+                              Colors.orange),
+                        ),
+                      ),
+                      GestureDetector(
+                        onVerticalDragUpdate: (details) {
+                          setState(() {
+                            _showFontSizeIndicator = true;
+                            _scaleFactor *= 1 - details.delta.dy / 50;
+                            _fontSizeIndicatorValue =
+                                (_scaleFactor * (_indicatorLevel / 3)).toInt();
+                          });
+                        },
+                        onVerticalDragEnd: (details) async {
+                          try {
+                            await Future.delayed(const Duration(seconds: 1),
+                                () {
+                              setState(() {
+                                _showFontSizeIndicator = false;
+                              });
+                            });
+                          } on FlutterError catch (e) {
+                            debugPrint(e.message);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
