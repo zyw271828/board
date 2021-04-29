@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage>
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
             ),
-            onPressed: () => _showNote(notes[index]),
+            onPressed: () => _showNote(notes, index),
             onLongPress: () =>
                 _isSearchButtonPressed ? null : _editNote(notes, index),
           ),
@@ -368,13 +368,13 @@ class _HomePageState extends State<HomePage>
     return result;
   }
 
-  void _showNote(Note note) {
+  void _showNote(List<Note> notes, int index) {
     Helper.enterDisplayMode();
 
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return NotePage(note: note);
+          return NotePage(notes: notes, index: index);
         },
       ),
     );

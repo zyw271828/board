@@ -12,9 +12,11 @@ import 'package:screen/screen.dart';
 import 'package:share/share.dart';
 
 class NotePage extends StatefulWidget {
-  final Note note;
+  final List<Note> notes;
+  final int index;
 
-  const NotePage({Key key, @required this.note}) : super(key: key);
+  const NotePage({Key key, @required this.notes, @required this.index})
+      : super(key: key);
 
   @override
   _NotePageState createState() => _NotePageState();
@@ -34,6 +36,7 @@ class _NotePageState extends State<NotePage> {
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
+  int _index;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,7 @@ class _NotePageState extends State<NotePage> {
         appBar: _showAppBar
             ? AppBar(
                 title: Text(
-                  widget.note.content,
+                  widget.notes[_index].content,
                   maxLines: 1,
                 ),
                 leading: Builder(
@@ -66,7 +69,7 @@ class _NotePageState extends State<NotePage> {
                     icon: Icon(Icons.share),
                     tooltip: AppLocalizations.of(context).share,
                     onPressed: () {
-                      Share.share(widget.note.content);
+                      Share.share(widget.notes[_index].content);
                     },
                   ),
                   IconButton(
@@ -279,10 +282,16 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.index;
+  }
+
   Widget _generateDisplayWidget() {
     if (_isQRcodeButtonPressed) {
       return QrImage(
-        data: widget.note.content,
+        data: widget.notes[_index].content,
         size: min(MediaQuery.of(context).size.height,
                 MediaQuery.of(context).size.width) -
             100,
@@ -291,7 +300,7 @@ class _NotePageState extends State<NotePage> {
       );
     } else if (_isMarkdownButtonPressed) {
       return MarkdownBody(
-        data: widget.note.content,
+        data: widget.notes[_index].content,
         selectable: true,
         styleSheet: MarkdownStyleSheet(
           textScaleFactor: _scaleFactor,
@@ -299,7 +308,7 @@ class _NotePageState extends State<NotePage> {
       );
     } else {
       return SelectableText(
-        widget.note.content,
+        widget.notes[_index].content,
         textScaleFactor: _scaleFactor,
         style: TextStyle(
           fontWeight: FontWeight.bold,
