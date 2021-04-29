@@ -15,10 +15,7 @@ class BoardWidgets {
             Container(
               width: 50,
               height: 50,
-              child: CircleAvatar(
-                foregroundImage: AssetImage('assets/images/icon-drawer.png'),
-                backgroundColor: Theme.of(context).accentColor,
-              ),
+              child: LogoAvatar(),
             ),
             _generatePackageInfoColumn(),
             SizedBox(width: 50),
@@ -142,6 +139,53 @@ class BoardWidgets {
           children: children,
         );
       },
+    );
+  }
+}
+
+class LogoAvatar extends StatefulWidget {
+  @override
+  _LogoAvatarState createState() => _LogoAvatarState();
+}
+
+class _LogoAvatarState extends State<LogoAvatar>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<double> _animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: GestureDetector(
+        onDoubleTap: () {
+          _animationController.reset();
+          _animationController.forward();
+        },
+        child: RotationTransition(
+          turns: _animation,
+          child: CircleAvatar(
+            foregroundImage: AssetImage('assets/images/icon-drawer.png'),
+            backgroundColor: Theme.of(context).accentColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.elasticOut,
     );
   }
 }
