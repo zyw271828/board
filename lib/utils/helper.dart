@@ -1,8 +1,8 @@
 import 'package:board/models/note.dart';
 import 'package:board/services/local_storage_service.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screen_wake/flutter_screen_wake.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:screen/screen.dart';
 import 'package:wakelock/wakelock.dart';
 
 class Helper {
@@ -13,7 +13,8 @@ class Helper {
 
     try {
       Wakelock.enable();
-      Screen.setBrightness(await LocalStorageService.loadScreenBrightness());
+      FlutterScreenWake.setBrightness(
+          await LocalStorageService.loadScreenBrightness());
     } on PlatformException catch (e) {
       // Waiting for wakelock to support Linux
       // https://github.com/creativecreatorormaybenot/wakelock/issues/97
@@ -43,9 +44,10 @@ class Helper {
 
   static Future<void> exitDisplayMode() async {
     try {
-      LocalStorageService.saveScreenBrightness(await Screen.brightness);
+      LocalStorageService.saveScreenBrightness(
+          await FlutterScreenWake.brightness);
       // Restore system screen brightness
-      Screen.setBrightness(-1);
+      FlutterScreenWake.setBrightness(-1);
       Wakelock.disable();
     } on MissingPluginException catch (e) {
       print(e.message);

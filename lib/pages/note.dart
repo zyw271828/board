@@ -7,8 +7,8 @@ import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_screen_wake/flutter_screen_wake.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:screen/screen.dart';
 import 'package:share/share.dart';
 
 class NotePage extends StatefulWidget {
@@ -233,15 +233,16 @@ class _NotePageState extends State<NotePage> {
                             _showBrightnessIndicator = true;
                           });
                           if (Platform.isAndroid || Platform.isIOS) {
-                            double brightness = await Screen.brightness -
-                                details.delta.dy / 500;
+                            double brightness =
+                                await FlutterScreenWake.brightness -
+                                    details.delta.dy / 500;
 
                             if (brightness >= 0 && brightness <= 1) {
-                              Screen.setBrightness(brightness);
+                              FlutterScreenWake.setBrightness(brightness);
                               setState(() {
-                                // Brightness cannot reach 1, so we add 0.01 here
+                                // Brightness cannot reach 1, so we add 0.1 here
                                 _brightnessIndicatorValue =
-                                    (brightness * (_indicatorLevel + 0.01))
+                                    (brightness * (_indicatorLevel + 0.1))
                                         .toInt();
                               });
                             }
