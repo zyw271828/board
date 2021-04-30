@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:share/share.dart';
 
 class NavDrawer extends StatefulWidget {
-  const NavDrawer({Key key}) : super(key: key);
+  const NavDrawer({Key? key}) : super(key: key);
 
   @override
   _NavDrawerState createState() => _NavDrawerState();
@@ -18,10 +18,10 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     final drawerHeader = UserAccountsDrawerHeader(
       accountName: Text(
-        AppLocalizations.of(context).appName,
+        AppLocalizations.of(context)!.appName,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
-      accountEmail: Text(AppLocalizations.of(context).appDescription),
+      accountEmail: Text(AppLocalizations.of(context)!.appDescription),
       currentAccountPicture: const CircleAvatar(
         foregroundImage: AssetImage('assets/images/icon-drawer.png'),
       ),
@@ -30,12 +30,12 @@ class _NavDrawerState extends State<NavDrawer> {
       children: [
         drawerHeader,
         ListTile(
-          title: Text(AppLocalizations.of(context).theme),
+          title: Text(AppLocalizations.of(context)!.theme),
           leading: const Icon(Icons.color_lens),
           onTap: () => _showThemeChangeDialog(),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context).donate),
+          title: Text(AppLocalizations.of(context)!.donate),
           leading: const Icon(Icons.payment),
           onTap: () {
             showDialog(
@@ -47,7 +47,7 @@ class _NavDrawerState extends State<NavDrawer> {
           },
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context).share),
+          title: Text(AppLocalizations.of(context)!.share),
           leading: const Icon(Icons.share),
           onTap: () async {
             Share.share('https://play.google.com/store/apps/details?id=' +
@@ -55,7 +55,7 @@ class _NavDrawerState extends State<NavDrawer> {
           },
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context).about),
+          title: Text(AppLocalizations.of(context)!.about),
           leading: const Icon(Icons.info),
           onTap: () {
             showDialog(
@@ -79,7 +79,7 @@ class _NavDrawerState extends State<NavDrawer> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: Text(AppLocalizations.of(context).changeTheme),
+          title: Text(AppLocalizations.of(context)!.changeTheme),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(8.0),
@@ -116,21 +116,21 @@ class _NavDrawerState extends State<NavDrawer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Helper.isDarkTheme(DynamicTheme.of(context).themeId)
+                      Icon(Helper.isDarkTheme(DynamicTheme.of(context)!.themeId)
                           ? Icons.brightness_low
                           : Icons.brightness_high),
                       Switch(
                         value: Helper.isDarkTheme(
-                            DynamicTheme.of(context).themeId),
+                            DynamicTheme.of(context)!.themeId),
                         activeColor: Theme.of(context).accentColor,
                         onChanged: (value) {
-                          int themeId = DynamicTheme.of(context).themeId;
+                          int themeId = DynamicTheme.of(context)!.themeId;
                           if (Helper.isLightTheme(themeId)) {
-                            DynamicTheme.of(context)
-                                .setTheme(Helper.generateDarkThemeId(themeId));
+                            DynamicTheme.of(context)!
+                                .setTheme(Helper.generateDarkThemeId(themeId)!);
                           } else {
-                            DynamicTheme.of(context)
-                                .setTheme(Helper.generateLightThemeId(themeId));
+                            DynamicTheme.of(context)!.setTheme(
+                                Helper.generateLightThemeId(themeId)!);
                           }
                         },
                       ),

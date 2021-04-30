@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -18,11 +18,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  List<Note> notes = <Note>[];
-  List<Note> duplicateNotes = <Note>[];
+  List<Note?> notes = <Note?>[];
+  List<Note?> duplicateNotes = <Note?>[];
   bool _isSearchButtonPressed = false;
   bool _isAnimationPlaying = false;
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage>
                       icon: AnimatedIcons.menu_arrow,
                       progress: _animationController,
                     ),
-                    tooltip: AppLocalizations.of(context).back,
+                    tooltip: AppLocalizations.of(context)!.back,
                     onPressed: () {
                       _playAnimation();
                       _exitSearchMode();
@@ -56,16 +56,16 @@ class _HomePageState extends State<HomePage>
                   child: TextField(
                     autofocus: true,
                     cursorColor:
-                        Theme.of(context).accentTextTheme.bodyText1.color,
+                        Theme.of(context).accentTextTheme.bodyText1!.color,
                     style: TextStyle(
                         color:
-                            Theme.of(context).accentTextTheme.bodyText1.color),
+                            Theme.of(context).accentTextTheme.bodyText1!.color),
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).searchNote,
+                      hintText: AppLocalizations.of(context)!.searchNote,
                       hintStyle: TextStyle(
                           color: Theme.of(context)
                               .accentTextTheme
-                              .bodyText1
+                              .bodyText1!
                               .color),
                       border: InputBorder.none,
                     ),
@@ -81,21 +81,21 @@ class _HomePageState extends State<HomePage>
                 ),
               )
             : AppBar(
-                title: Text(AppLocalizations.of(context).appName),
+                title: Text(AppLocalizations.of(context)!.appName),
                 leading: Builder(
                   builder: (context) => IconButton(
                     icon: AnimatedIcon(
                       icon: AnimatedIcons.menu_arrow,
                       progress: _animationController,
                     ),
-                    tooltip: AppLocalizations.of(context).menu,
+                    tooltip: AppLocalizations.of(context)!.menu,
                     onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
                 ),
                 actions: <Widget>[
                   new IconButton(
                     icon: const Icon(Icons.search),
-                    tooltip: AppLocalizations.of(context).search,
+                    tooltip: AppLocalizations.of(context)!.search,
                     onPressed: () {
                       _playAnimation();
                       setState(() {
@@ -107,11 +107,11 @@ class _HomePageState extends State<HomePage>
                   ),
                   new PopupMenuButton(
                     icon: const Icon(Icons.more_vert),
-                    tooltip: AppLocalizations.of(context).more,
+                    tooltip: AppLocalizations.of(context)!.more,
                     itemBuilder: (BuildContext context) {
                       return {
-                        AppLocalizations.of(context).about,
-                        AppLocalizations.of(context).exit
+                        AppLocalizations.of(context)!.about,
+                        AppLocalizations.of(context)!.exit
                       }.map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
@@ -119,15 +119,15 @@ class _HomePageState extends State<HomePage>
                         );
                       }).toList();
                     },
-                    onSelected: (choice) {
-                      if (choice == AppLocalizations.of(context).about) {
+                    onSelected: (String choice) {
+                      if (choice == AppLocalizations.of(context)!.about) {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return BoardWidgets.generateAboutDialog(context);
                           },
                         );
-                      } else if (choice == AppLocalizations.of(context).exit) {
+                      } else if (choice == AppLocalizations.of(context)!.exit) {
                         SystemChannels.platform
                             .invokeMethod('SystemNavigator.pop');
                       }
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage>
             ? null
             : FloatingActionButton(
                 onPressed: () => _addNote(notes),
-                tooltip: AppLocalizations.of(context).addANote,
+                tooltip: AppLocalizations.of(context)!.addANote,
                 child: Icon(Icons.add),
               ),
         drawer: _isSearchButtonPressed ? null : NavDrawer(),
@@ -198,24 +198,28 @@ class _HomePageState extends State<HomePage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
   }
 
-  void _addNote(List<Note> notes) async {
-    Note newNote = await _showTextEditDialog(
-        AppLocalizations.of(context).newNote,
-        AppLocalizations.of(context).note,
-        Note(null, 900));
+  void _addNote(List<Note?> notes) async {
+    Note? newNote;
 
-    if (newNote.content != null) {
+    Future<Note?> tempNote = _showTextEditDialog(
+        AppLocalizations.of(context)!.newNote,
+        AppLocalizations.of(context)!.note,
+        Note('', 900));
+
+    newNote = await tempNote;
+
+    if (newNote != null) {
       setState(() {
         notes.add(newNote);
         Helper.updateColorCodes(notes);
       });
-    }
 
-    LocalStorageService.saveNote(notes);
+      LocalStorageService.saveNote(notes);
+    }
   }
 
-  Note _deleteNote(List<Note> notes, int index) {
-    Note deletedNote = notes[index];
+  Note? _deleteNote(List<Note?> notes, int index) {
+    Note? deletedNote = notes[index];
 
     setState(() {
       notes.removeAt(index);
@@ -226,17 +230,23 @@ class _HomePageState extends State<HomePage>
     return deletedNote;
   }
 
-  void _editNote(List<Note> notes, int index) async {
-    Note editedNote = await _showTextEditDialog(
-        AppLocalizations.of(context).editNote,
-        AppLocalizations.of(context).note,
-        notes[index]);
+  void _editNote(List<Note?> notes, int index) async {
+    Note? editedNote;
 
-    setState(() {
-      notes[index] = editedNote;
-    });
+    Future<Note?> tempNote = _showTextEditDialog(
+        AppLocalizations.of(context)!.editNote,
+        AppLocalizations.of(context)!.note,
+        notes[index]!);
 
-    LocalStorageService.saveNote(notes);
+    editedNote = await tempNote;
+
+    if (editedNote != null) {
+      setState(() {
+        notes[index] = editedNote;
+      });
+
+      LocalStorageService.saveNote(notes);
+    }
   }
 
   _exitSearchMode() {
@@ -250,14 +260,14 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  Container _generateNoteContainer(List<Note> notes, int index) {
+  Container _generateNoteContainer(List<Note?> notes, int index) {
     ColorSwatch swatch;
-    if (Helper.isLightTheme(DynamicTheme.of(context).themeId)) {
-      swatch = Colors.primaries[DynamicTheme.of(context).themeId];
+    if (Helper.isLightTheme(DynamicTheme.of(context)!.themeId)) {
+      swatch = Colors.primaries[DynamicTheme.of(context)!.themeId];
     } else {
       // Dark theme, but use the Colors.primaries of the light theme
       swatch = Colors.primaries[
-          Helper.generateLightThemeId(DynamicTheme.of(context).themeId)];
+          Helper.generateLightThemeId(DynamicTheme.of(context)!.themeId)!];
     }
 
     return Container(
@@ -266,8 +276,8 @@ class _HomePageState extends State<HomePage>
         children: [
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  swatch[notes[index].colorCode]),
+              backgroundColor: MaterialStateProperty.all<Color?>(
+                  swatch[notes[index]!.colorCode]),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
@@ -276,7 +286,7 @@ class _HomePageState extends State<HomePage>
             ),
             child: Container(
               constraints: BoxConstraints(minHeight: 50),
-              child: Center(child: Text(notes[index].content)),
+              child: Center(child: Text(notes[index]!.content!)),
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
             ),
@@ -291,7 +301,7 @@ class _HomePageState extends State<HomePage>
               alignment: Alignment.centerRight,
               child: Icon(
                 _isSearchButtonPressed ? null : Icons.drag_handle,
-                color: Theme.of(context).accentTextTheme.bodyText1.color,
+                color: Theme.of(context).accentTextTheme.bodyText1!.color,
               ),
               padding: const EdgeInsets.all(8.0),
             ),
@@ -301,7 +311,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Dismissible _generateNoteDismissible(List<Note> notes, int index) {
+  Dismissible _generateNoteDismissible(List<Note?> notes, int index) {
     return Dismissible(
       key: ObjectKey(notes[index]),
       dismissThresholds: <DismissDirection, double>{
@@ -311,13 +321,13 @@ class _HomePageState extends State<HomePage>
       onDismissed: (direction) {
         if (direction == DismissDirection.startToEnd ||
             direction == DismissDirection.endToStart) {
-          Note deletedNote = _deleteNote(notes, index);
+          Note deletedNote = _deleteNote(notes, index)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${deletedNote.content} " +
-                  AppLocalizations.of(context).deleted),
+                  AppLocalizations.of(context)!.deleted),
               action: SnackBarAction(
-                label: AppLocalizations.of(context).undo,
+                label: AppLocalizations.of(context)!.undo,
                 onPressed: () {
                   _undoDeleteNote(deletedNote, notes, index);
                 },
@@ -357,18 +367,18 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  List<int> _searchNote(List<Note> notes, String value) {
+  List<int> _searchNote(List<Note?> notes, String value) {
     List<int> result = <int>[];
 
     for (var i = 0; i < notes.length; i++) {
-      if (notes[i].content.toLowerCase().contains(value.toLowerCase())) {
+      if (notes[i]!.content!.toLowerCase().contains(value.toLowerCase())) {
         result.add(i);
       }
     }
     return result;
   }
 
-  void _showNote(List<Note> notes, int index) {
+  void _showNote(List<Note?> notes, int index) {
     Helper.enterDisplayMode();
 
     Navigator.of(context).push(
@@ -380,11 +390,11 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Future<Note> _showTextEditDialog(
+  Future<Note?> _showTextEditDialog(
       String title, String label, Note prefilledNote) async {
     final _controller = TextEditingController();
 
-    _controller.text = prefilledNote.content;
+    _controller.text = prefilledNote.content!;
 
     return showDialog<Note>(
       context: context,
@@ -411,10 +421,10 @@ class _HomePageState extends State<HomePage>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      child: Text(AppLocalizations.of(context).cancel),
-                      onPressed: () => {Navigator.pop(context, prefilledNote)}),
+                      child: Text(AppLocalizations.of(context)!.cancel),
+                      onPressed: () => {Navigator.pop(context, null)}),
                   TextButton(
-                      child: Text(AppLocalizations.of(context).save),
+                      child: Text(AppLocalizations.of(context)!.save),
                       onPressed: () => {
                             Navigator.pop(context,
                                 Note(_controller.text, prefilledNote.colorCode))
@@ -428,7 +438,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  void _undoDeleteNote(Note deletedNote, List<Note> notes, int index) {
+  void _undoDeleteNote(Note deletedNote, List<Note?> notes, int index) {
     if (notes.length > index) {
       setState(() {
         notes.insert(index, deletedNote);

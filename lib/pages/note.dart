@@ -12,10 +12,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 
 class NotePage extends StatefulWidget {
-  final List<Note> notes;
+  final List<Note?> notes;
   final int index;
 
-  const NotePage({Key key, @required this.notes, @required this.index})
+  const NotePage({Key? key, required this.notes, required this.index})
       : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class _NotePageState extends State<NotePage> {
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
   int _indicatorLevel = 15;
-  int _index;
+  int _index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,14 @@ class _NotePageState extends State<NotePage> {
         appBar: _showAppBar
             ? AppBar(
                 title: Text(
-                  widget.notes[_index].content,
+                  widget.notes[_index]!.content!,
                   maxLines: 1,
                 ),
                 leading: Builder(
                   builder: (BuildContext context) {
                     return IconButton(
                       icon: const Icon(Icons.arrow_back),
-                      tooltip: AppLocalizations.of(context).back,
+                      tooltip: AppLocalizations.of(context)!.back,
                       onPressed: () {
                         Helper.exitDisplayMode();
                         Navigator.of(context).pop();
@@ -67,9 +67,9 @@ class _NotePageState extends State<NotePage> {
                 actions: <Widget>[
                   IconButton(
                     icon: Icon(Icons.share),
-                    tooltip: AppLocalizations.of(context).share,
+                    tooltip: AppLocalizations.of(context)!.share,
                     onPressed: () {
-                      Share.share(widget.notes[_index].content);
+                      Share.share(widget.notes[_index]!.content!);
                     },
                   ),
                   IconButton(
@@ -77,8 +77,8 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.color_lens_outlined
                         : Icons.color_lens),
                     tooltip: _isColorButtonPressed
-                        ? AppLocalizations.of(context).blackAndWhiteMode
-                        : AppLocalizations.of(context).colorMode,
+                        ? AppLocalizations.of(context)!.blackAndWhiteMode
+                        : AppLocalizations.of(context)!.colorMode,
                     onPressed: () {
                       setState(() {
                         _isColorButtonPressed = !_isColorButtonPressed;
@@ -90,8 +90,8 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.stay_primary_landscape
                         : Icons.stay_primary_portrait),
                     tooltip: _isRotateButtonPressed
-                        ? AppLocalizations.of(context).landscapeMode
-                        : AppLocalizations.of(context).portraitMode,
+                        ? AppLocalizations.of(context)!.landscapeMode
+                        : AppLocalizations.of(context)!.portraitMode,
                     onPressed: () {
                       if (_isRotateButtonPressed) {
                         Helper.enterLandscapeMode();
@@ -106,8 +106,8 @@ class _NotePageState extends State<NotePage> {
                   IconButton(
                     icon: Icon(Icons.sync_alt),
                     tooltip: _isMarkdownButtonPressed
-                        ? AppLocalizations.of(context).plainTextMode
-                        : AppLocalizations.of(context).markdownMode,
+                        ? AppLocalizations.of(context)!.plainTextMode
+                        : AppLocalizations.of(context)!.markdownMode,
                     onPressed: () {
                       setState(() {
                         _isMarkdownButtonPressed = !_isMarkdownButtonPressed;
@@ -119,8 +119,8 @@ class _NotePageState extends State<NotePage> {
                         ? Icons.text_snippet
                         : Icons.qr_code),
                     tooltip: _isQRcodeButtonPressed
-                        ? AppLocalizations.of(context).textMode
-                        : AppLocalizations.of(context).qrcodeMode,
+                        ? AppLocalizations.of(context)!.textMode
+                        : AppLocalizations.of(context)!.qrcodeMode,
                     onPressed: () {
                       setState(() {
                         _isQRcodeButtonPressed = !_isQRcodeButtonPressed;
@@ -321,7 +321,7 @@ class _NotePageState extends State<NotePage> {
   Widget _generateDisplayWidget() {
     if (_isQRcodeButtonPressed) {
       return QrImage(
-        data: widget.notes[_index].content,
+        data: widget.notes[_index]!.content!,
         size: min(MediaQuery.of(context).size.height,
                 MediaQuery.of(context).size.width) -
             100,
@@ -330,7 +330,7 @@ class _NotePageState extends State<NotePage> {
       );
     } else if (_isMarkdownButtonPressed) {
       return MarkdownBody(
-        data: widget.notes[_index].content,
+        data: widget.notes[_index]!.content!,
         selectable: true,
         styleSheet: MarkdownStyleSheet(
           textScaleFactor: _scaleFactor,
@@ -338,13 +338,13 @@ class _NotePageState extends State<NotePage> {
       );
     } else {
       return SelectableText(
-        widget.notes[_index].content,
+        widget.notes[_index]!.content!,
         textScaleFactor: _scaleFactor,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: _noteFontSize,
           color: _isColorButtonPressed
-              ? Theme.of(context).accentTextTheme.bodyText1.color
+              ? Theme.of(context).accentTextTheme.bodyText1!.color
               : null,
         ),
       );
@@ -360,7 +360,7 @@ class _NotePageState extends State<NotePage> {
       progress = _indicatorLevel;
     }
 
-    bool isDarkTheme = Helper.isDarkTheme(DynamicTheme.of(context).themeId);
+    bool isDarkTheme = Helper.isDarkTheme(DynamicTheme.of(context)!.themeId);
     Color backgroundColor = isDarkTheme ? Colors.white : Colors.black;
     Color foregroundColor = isDarkTheme ? Colors.black : Colors.white;
 

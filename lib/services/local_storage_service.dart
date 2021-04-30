@@ -4,20 +4,20 @@ import 'package:board/models/note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
-  static Future<List<Note>> loadNote() async {
-    List<Note> notes = <Note>[];
+  static Future<List<Note?>> loadNote() async {
+    List<Note?> notes = <Note?>[];
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int numberOfNotes = prefs.getInt('numberOfNotes');
+    int? numberOfNotes = prefs.getInt('numberOfNotes');
 
     if (numberOfNotes != null) {
       for (var i = 0; i < numberOfNotes; i++) {
-        String jsonString = prefs.getString('note' + i.toString());
+        String jsonString = prefs.getString('note' + i.toString())!;
         Map noteMap = jsonDecode(jsonString);
-        var note = Note.fromJson(noteMap);
+        var note = Note.fromJson(noteMap as Map<String, dynamic>);
         notes.add(note);
       }
     } else {
-      notes = <Note>[
+      notes = <Note?>[
         Note('john.smith@example.com', 900),
         Note('+1 (123) 456-7891', 800),
         Note(
@@ -32,7 +32,7 @@ class LocalStorageService {
   }
 
   static Future<double> loadScreenBrightness() async {
-    double screenBrightness;
+    double? screenBrightness;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     screenBrightness = prefs.getDouble('screenBrightness');
 
@@ -43,10 +43,10 @@ class LocalStorageService {
     }
   }
 
-  static saveNote(List<Note> notes) async {
+  static saveNote(List<Note?> notes) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    int numberOfNotes = prefs.getInt('numberOfNotes');
+    int? numberOfNotes = prefs.getInt('numberOfNotes');
     if (numberOfNotes != null) {
       for (var i = 0; i < numberOfNotes; i++) {
         prefs.remove('note' + i.toString());

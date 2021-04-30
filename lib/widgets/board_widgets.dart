@@ -28,13 +28,13 @@ class BoardWidgets {
   static Widget generateDonateDialog(BuildContext context) {
     // TODO: unfinished donate dialog
     return SimpleDialog(
-      title: Text(AppLocalizations.of(context).donate),
+      title: Text(AppLocalizations.of(context)!.donate),
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(AppLocalizations.of(context).donateDescription),
+              Text(AppLocalizations.of(context)!.donateDescription),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -81,17 +81,17 @@ class BoardWidgets {
       ),
       child: GestureDetector(
         onTap: () {
-          int currentThemeId = DynamicTheme.of(context).themeId;
+          int currentThemeId = DynamicTheme.of(context)!.themeId;
           if (Helper.isLightTheme(currentThemeId)) {
-            DynamicTheme.of(context).setTheme(themeId);
+            DynamicTheme.of(context)!.setTheme(themeId);
           } else {
-            DynamicTheme.of(context)
-                .setTheme(Helper.generateDarkThemeId(themeId));
+            DynamicTheme.of(context)!
+                .setTheme(Helper.generateDarkThemeId(themeId)!);
           }
         },
-        child: (themeId == DynamicTheme.of(context).themeId ||
+        child: (themeId == DynamicTheme.of(context)!.themeId ||
                 Helper.generateDarkThemeId(themeId) ==
-                    DynamicTheme.of(context).themeId)
+                    DynamicTheme.of(context)!.themeId)
             ? Icon(
                 Icons.check,
                 size: 30,
@@ -111,18 +111,18 @@ class BoardWidgets {
         if (snapshot.hasData) {
           children = <Widget>[
             Text(
-              snapshot.data.appName,
+              snapshot.data!.appName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
             ),
-            snapshot.data.packageName.isEmpty
+            snapshot.data!.packageName.isEmpty
                 ? SizedBox(height: 0)
-                : Text(snapshot.data.packageName),
+                : Text(snapshot.data!.packageName),
             SizedBox(height: 8),
-            Text('Version: ' + snapshot.data.version),
-            Text('Build number: ' + snapshot.data.buildNumber),
+            Text('Version: ' + snapshot.data!.version),
+            Text('Build number: ' + snapshot.data!.buildNumber),
           ];
         } else {
           children = <Widget>[
@@ -150,8 +150,8 @@ class LogoAvatar extends StatefulWidget {
 
 class _LogoAvatarState extends State<LogoAvatar>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<double> _animation;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   Widget build(BuildContext context) {

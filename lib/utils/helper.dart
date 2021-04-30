@@ -66,11 +66,11 @@ class Helper {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   }
 
-  static int generateDarkThemeId(int lightThemeId) {
+  static int? generateDarkThemeId(int lightThemeId) {
     return isLightTheme(lightThemeId) ? (lightThemeId + 100) : null;
   }
 
-  static int generateLightThemeId(int darkThemeId) {
+  static int? generateLightThemeId(int darkThemeId) {
     return isDarkTheme(darkThemeId) ? (darkThemeId - 100) : null;
   }
 
@@ -101,7 +101,7 @@ class Helper {
     ]);
   }
 
-  static void updateColorCodes(List<Note> notes) {
+  static void updateColorCodes(List<Note?> notes) {
     const int maxColorCode = 900;
     const int minColorCode = 300;
     const int step = 100;
@@ -111,13 +111,13 @@ class Helper {
 
     for (var note in notes) {
       if (isColorCodesIncreasing) {
-        note.colorCode = curColorCode;
+        note!.colorCode = curColorCode;
         curColorCode += step;
         if (curColorCode >= maxColorCode) {
           isColorCodesIncreasing = false;
         }
       } else {
-        note.colorCode = curColorCode;
+        note!.colorCode = curColorCode;
         curColorCode -= step;
         if (curColorCode <= minColorCode) {
           isColorCodesIncreasing = true;
