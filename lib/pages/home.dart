@@ -55,17 +55,31 @@ class _HomePageState extends State<HomePage>
                 title: Container(
                   child: TextField(
                     autofocus: true,
-                    cursorColor:
-                        Theme.of(context).accentTextTheme.bodyText1!.color,
+                    cursorColor: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        )
+                        .color,
                     style: TextStyle(
-                        color:
-                            Theme.of(context).accentTextTheme.bodyText1!.color),
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            )
+                            .color),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.searchNote,
                       hintStyle: TextStyle(
                           color: Theme.of(context)
-                              .accentTextTheme
+                              .textTheme
                               .bodyText1!
+                              .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                              )
                               .color),
                       border: InputBorder.none,
                     ),
@@ -301,7 +315,13 @@ class _HomePageState extends State<HomePage>
               alignment: Alignment.centerRight,
               child: Icon(
                 _isSearchButtonPressed ? null : Icons.drag_handle,
-                color: Theme.of(context).accentTextTheme.bodyText1!.color,
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    )
+                    .color,
               ),
               padding: const EdgeInsets.all(8.0),
             ),

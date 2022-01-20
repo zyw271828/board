@@ -10,7 +10,7 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screen_wake/flutter_screen_wake.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NotePage extends StatefulWidget {
   final List<Note?> notes;
@@ -142,7 +142,7 @@ class _NotePageState extends State<NotePage> {
             children: [
               Container(
                 color: _isColorButtonPressed
-                    ? Theme.of(context).accentColor
+                    ? Theme.of(context).colorScheme.secondary
                     : null,
               ),
               AnimatedSwitcher(
@@ -361,7 +361,13 @@ class _NotePageState extends State<NotePage> {
           fontWeight: FontWeight.bold,
           fontSize: _noteFontSize,
           color: _isColorButtonPressed
-              ? Theme.of(context).accentTextTheme.bodyText1!.color
+              ? Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  )
+                  .color
               : null,
         ),
       );

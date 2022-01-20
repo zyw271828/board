@@ -25,7 +25,7 @@ class Helper {
   }
 
   static void enterFullscreenMode() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   static void enterLandscapeMode() {
@@ -63,7 +63,7 @@ class Helper {
   }
 
   static void exitFullscreenMode() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
   static int? generateDarkThemeId(int lightThemeId) {

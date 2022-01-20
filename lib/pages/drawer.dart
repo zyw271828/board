@@ -4,7 +4,7 @@ import 'package:board/widgets/board_widgets.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -122,7 +122,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       Switch(
                         value: Helper.isDarkTheme(
                             DynamicTheme.of(context)!.themeId),
-                        activeColor: Theme.of(context).accentColor,
+                        activeColor: Theme.of(context).colorScheme.secondary,
                         onChanged: (value) {
                           int themeId = DynamicTheme.of(context)!.themeId;
                           if (Helper.isLightTheme(themeId)) {

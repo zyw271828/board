@@ -165,7 +165,7 @@ class _LogoAvatarState extends State<LogoAvatar>
           turns: _animation,
           child: CircleAvatar(
             foregroundImage: AssetImage('assets/images/icon-drawer.png'),
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),
