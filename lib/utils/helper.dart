@@ -1,5 +1,6 @@
 import 'package:board/models/note.dart';
 import 'package:board/services/local_storage_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screen_wake/flutter_screen_wake.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,9 +19,13 @@ class Helper {
     } on PlatformException catch (e) {
       // Waiting for wakelock to support Linux
       // https://github.com/creativecreatorormaybenot/wakelock/issues/97
-      print(e.message);
+      if (kDebugMode) {
+        print(e.message);
+      }
     } on MissingPluginException catch (e) {
-      print(e.message);
+      if (kDebugMode) {
+        print(e.message);
+      }
     }
   }
 
@@ -50,11 +55,15 @@ class Helper {
       FlutterScreenWake.setBrightness(-1);
       Wakelock.disable();
     } on MissingPluginException catch (e) {
-      print(e.message);
+      if (kDebugMode) {
+        print(e.message);
+      }
     } on PlatformException catch (e) {
       // Waiting for wakelock to support Linux
       // https://github.com/creativecreatorormaybenot/wakelock/issues/97
-      print(e.message);
+      if (kDebugMode) {
+        print(e.message);
+      }
     }
 
     exitFullscreenMode();

@@ -20,11 +20,11 @@ class NotePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _NotePageState createState() => _NotePageState();
+  NotePageState createState() => NotePageState();
 }
 
-class _NotePageState extends State<NotePage> {
-  double _noteFontSize = 60;
+class NotePageState extends State<NotePage> {
+  final double _noteFontSize = 60;
   double _baseScaleFactor = 1;
   double _scaleFactor = 1;
   bool _showAppBar = false;
@@ -36,7 +36,7 @@ class _NotePageState extends State<NotePage> {
   bool _isColorButtonPressed = false;
   int _fontSizeIndicatorValue = 0;
   int _brightnessIndicatorValue = 0;
-  int _indicatorLevel = 15;
+  final int _indicatorLevel = 15;
   int _index = 0;
 
   final FocusNode _focusNode = FocusNode();
@@ -71,7 +71,7 @@ class _NotePageState extends State<NotePage> {
                 ),
                 actions: <Widget>[
                   IconButton(
-                    icon: Icon(Icons.share),
+                    icon: const Icon(Icons.share),
                     tooltip: AppLocalizations.of(context)!.share,
                     onPressed: () {
                       Share.share(widget.notes[_index]!.content!);
@@ -109,7 +109,7 @@ class _NotePageState extends State<NotePage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.sync_alt),
+                    icon: const Icon(Icons.sync_alt),
                     tooltip: _isMarkdownButtonPressed
                         ? AppLocalizations.of(context)!.plainTextMode
                         : AppLocalizations.of(context)!.markdownMode,
@@ -146,11 +146,11 @@ class _NotePageState extends State<NotePage> {
                     : null,
               ),
               AnimatedSwitcher(
-                duration: Duration(milliseconds: 450),
+                duration: const Duration(milliseconds: 450),
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return FadeTransition(
-                    child: child,
                     opacity: animation,
+                    child: child,
                   );
                 },
                 child: Center(
@@ -221,7 +221,7 @@ class _NotePageState extends State<NotePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     height: MediaQuery.of(context).size.height,
                     child: Stack(
@@ -229,8 +229,8 @@ class _NotePageState extends State<NotePage> {
                         Center(
                           child: AnimatedOpacity(
                             opacity: _showFontSizeIndicator ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 500),
-                            child: _generateIndicatorContainer(
+                            duration: const Duration(milliseconds: 500),
+                            child: _generateIndicatorSizedBox(
                                 _fontSizeIndicatorValue,
                                 Icons.format_size,
                                 Colors.purple),
@@ -273,7 +273,7 @@ class _NotePageState extends State<NotePage> {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 100,
                     height: MediaQuery.of(context).size.height,
                     child: Stack(
@@ -281,8 +281,8 @@ class _NotePageState extends State<NotePage> {
                         Center(
                           child: AnimatedOpacity(
                             opacity: _showBrightnessIndicator ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 450),
-                            child: _generateIndicatorContainer(
+                            duration: const Duration(milliseconds: 450),
+                            child: _generateIndicatorSizedBox(
                                 _brightnessIndicatorValue,
                                 Icons.brightness_6,
                                 Colors.orange),
@@ -374,7 +374,7 @@ class _NotePageState extends State<NotePage> {
     }
   }
 
-  Container _generateIndicatorContainer(
+  SizedBox _generateIndicatorSizedBox(
       int progress, IconData icon, MaterialColor color) {
     // 0 <= progress <= _indicatorLevel
     if (progress < 0) {
@@ -387,12 +387,12 @@ class _NotePageState extends State<NotePage> {
     Color backgroundColor = isDarkTheme ? Colors.white : Colors.black;
     Color foregroundColor = isDarkTheme ? Colors.black : Colors.white;
 
-    return Container(
+    return SizedBox(
       width: 50,
       height: 300,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: 50,
             height: 50,
             child: Center(
@@ -426,7 +426,7 @@ class _NotePageState extends State<NotePage> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 50,
             height: 50,
             child: Center(

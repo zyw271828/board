@@ -6,10 +6,12 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return DynamicTheme(
@@ -18,18 +20,18 @@ class MyApp extends StatelessWidget {
       builder: (context, theme) {
         return MaterialApp(
           title: 'Board',
-          localizationsDelegates: [
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale.fromSubtags(languageCode: 'en'),
-            const Locale.fromSubtags(languageCode: 'zh'),
+          supportedLocales: const [
+            Locale.fromSubtags(languageCode: 'en'),
+            Locale.fromSubtags(languageCode: 'zh'),
           ],
           theme: theme,
-          home: HomePage(),
+          home: const HomePage(),
         );
       },
     );

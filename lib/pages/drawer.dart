@@ -10,16 +10,16 @@ class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
 
   @override
-  _NavDrawerState createState() => _NavDrawerState();
+  NavDrawerState createState() => NavDrawerState();
 }
 
-class _NavDrawerState extends State<NavDrawer> {
+class NavDrawerState extends State<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     final drawerHeader = UserAccountsDrawerHeader(
       accountName: Text(
         AppLocalizations.of(context)!.appName,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       accountEmail: Text(AppLocalizations.of(context)!.appDescription),
       currentAccountPicture: const CircleAvatar(
@@ -50,8 +50,8 @@ class _NavDrawerState extends State<NavDrawer> {
           title: Text(AppLocalizations.of(context)!.share),
           leading: const Icon(Icons.share),
           onTap: () async {
-            Share.share('https://play.google.com/store/apps/details?id=' +
-                await Helper.getPackageName());
+            Share.share(
+                'https://play.google.com/store/apps/details?id=${await Helper.getPackageName()}');
           },
         ),
         ListTile(
@@ -98,7 +98,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           context, BoardThemeData.yellow),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -112,7 +112,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           context, BoardThemeData.purple),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

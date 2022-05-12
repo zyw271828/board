@@ -13,10 +13,10 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   List<Note?> notes = <Note?>[];
   List<Note?> duplicateNotes = <Note?>[];
@@ -52,17 +52,26 @@ class _HomePageState extends State<HomePage>
                     },
                   ),
                 ),
-                title: Container(
-                  child: TextField(
-                    autofocus: true,
-                    cursorColor: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        )
-                        .color,
-                    style: TextStyle(
+                title: TextField(
+                  autofocus: true,
+                  cursorColor: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      )
+                      .color,
+                  style: TextStyle(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          )
+                          .color),
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.searchNote,
+                    hintStyle: TextStyle(
                         color: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -70,28 +79,16 @@ class _HomePageState extends State<HomePage>
                               color: Theme.of(context).colorScheme.onSecondary,
                             )
                             .color),
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.searchNote,
-                      hintStyle: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                              )
-                              .color),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      duplicateNotes.clear();
-                      setState(() {
-                        for (var index in _searchNote(notes, value)) {
-                          duplicateNotes.add(notes[index]);
-                        }
-                      });
-                    },
+                    border: InputBorder.none,
                   ),
+                  onChanged: (value) {
+                    duplicateNotes.clear();
+                    setState(() {
+                      for (var index in _searchNote(notes, value)) {
+                        duplicateNotes.add(notes[index]);
+                      }
+                    });
+                  },
                 ),
               )
             : AppBar(
@@ -107,7 +104,7 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
                 actions: <Widget>[
-                  new IconButton(
+                  IconButton(
                     icon: const Icon(Icons.search),
                     tooltip: AppLocalizations.of(context)!.search,
                     onPressed: () {
@@ -119,7 +116,7 @@ class _HomePageState extends State<HomePage>
                       });
                     },
                   ),
-                  new PopupMenuButton(
+                  PopupMenuButton(
                     icon: const Icon(Icons.more_vert),
                     tooltip: AppLocalizations.of(context)!.more,
                     itemBuilder: (BuildContext context) {
@@ -156,7 +153,7 @@ class _HomePageState extends State<HomePage>
                   itemCount: duplicateNotes.length,
                   itemBuilder: (BuildContext context, int index) {
                     // TODO: use generateNoteDismissible and fix delete & edit
-                    return _generateNoteContainer(duplicateNotes, index);
+                    return _generateNoteSizedBox(duplicateNotes, index);
                   },
                 ),
               )
@@ -187,9 +184,9 @@ class _HomePageState extends State<HomePage>
             : FloatingActionButton(
                 onPressed: () => _addNote(notes),
                 tooltip: AppLocalizations.of(context)!.addANote,
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
-        drawer: _isSearchButtonPressed ? null : NavDrawer(),
+        drawer: _isSearchButtonPressed ? null : const NavDrawer(),
       ),
     );
   }
@@ -208,8 +205,8 @@ class _HomePageState extends State<HomePage>
         notes = initNotes;
       });
     });
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
   }
 
   void _addNote(List<Note?> notes) async {
@@ -274,7 +271,7 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  Container _generateNoteContainer(List<Note?> notes, int index) {
+  SizedBox _generateNoteSizedBox(List<Note?> notes, int index) {
     ColorSwatch swatch;
     if (Helper.isLightTheme(DynamicTheme.of(context)!.themeId)) {
       swatch = Colors.primaries[DynamicTheme.of(context)!.themeId];
@@ -284,7 +281,7 @@ class _HomePageState extends State<HomePage>
           Helper.generateLightThemeId(DynamicTheme.of(context)!.themeId)!];
     }
 
-    return Container(
+    return SizedBox(
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -293,16 +290,16 @@ class _HomePageState extends State<HomePage>
               backgroundColor: MaterialStateProperty.all<Color?>(
                   swatch[notes[index]!.colorCode]),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
+                const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 ),
               ),
             ),
             child: Container(
-              constraints: BoxConstraints(minHeight: 50),
-              child: Center(child: Text(notes[index]!.content!)),
+              constraints: const BoxConstraints(minHeight: 50),
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+              child: Center(child: Text(notes[index]!.content!)),
             ),
             onPressed: () => _showNote(notes, index),
             onLongPress: () =>
@@ -311,8 +308,9 @@ class _HomePageState extends State<HomePage>
           ReorderableDragStartListener(
             index: index,
             child: Container(
-              constraints: BoxConstraints(minHeight: 50),
+              constraints: const BoxConstraints(minHeight: 50),
               alignment: Alignment.centerRight,
+              padding: const EdgeInsets.all(8.0),
               child: Icon(
                 _isSearchButtonPressed ? null : Icons.drag_handle,
                 color: Theme.of(context)
@@ -323,7 +321,6 @@ class _HomePageState extends State<HomePage>
                     )
                     .color,
               ),
-              padding: const EdgeInsets.all(8.0),
             ),
           ),
         ],
@@ -334,7 +331,7 @@ class _HomePageState extends State<HomePage>
   Dismissible _generateNoteDismissible(List<Note?> notes, int index) {
     return Dismissible(
       key: ObjectKey(notes[index]),
-      dismissThresholds: <DismissDirection, double>{
+      dismissThresholds: const <DismissDirection, double>{
         DismissDirection.startToEnd: 0.4,
         DismissDirection.endToStart: 0.4,
       },
@@ -344,8 +341,8 @@ class _HomePageState extends State<HomePage>
           Note deletedNote = _deleteNote(notes, index)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("${deletedNote.content} " +
-                  AppLocalizations.of(context)!.deleted),
+              content: Text(
+                  '${deletedNote.content} ${AppLocalizations.of(context)!.deleted}'),
               action: SnackBarAction(
                 label: AppLocalizations.of(context)!.undo,
                 onPressed: () {
@@ -360,7 +357,7 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.all(8.0),
         color: Colors.red,
         alignment: Alignment.centerLeft,
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
         ),
@@ -369,12 +366,12 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.all(8.0),
         color: Colors.red,
         alignment: Alignment.centerRight,
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
         ),
       ),
-      child: _generateNoteContainer(notes, index),
+      child: _generateNoteSizedBox(notes, index),
     );
   }
 
@@ -402,7 +399,7 @@ class _HomePageState extends State<HomePage>
     Helper.enterDisplayMode();
 
     Navigator.of(context).push(
-      new MaterialPageRoute<void>(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return NotePage(notes: notes, index: index);
         },
@@ -412,9 +409,9 @@ class _HomePageState extends State<HomePage>
 
   Future<Note?> _showTextEditDialog(
       String title, String label, Note prefilledNote) async {
-    final _controller = TextEditingController();
+    final controller = TextEditingController();
 
-    _controller.text = prefilledNote.content!;
+    controller.text = prefilledNote.content!;
 
     return showDialog<Note>(
       context: context,
@@ -426,11 +423,11 @@ class _HomePageState extends State<HomePage>
             Container(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                controller: _controller,
+                controller: controller,
                 autofocus: true,
                 maxLines: null,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   labelText: label,
                 ),
               ),
@@ -447,7 +444,7 @@ class _HomePageState extends State<HomePage>
                       child: Text(AppLocalizations.of(context)!.save),
                       onPressed: () => {
                             Navigator.pop(context,
-                                Note(_controller.text, prefilledNote.colorCode))
+                                Note(controller.text, prefilledNote.colorCode))
                           }),
                 ],
               ),

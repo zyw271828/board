@@ -12,13 +12,13 @@ class BoardWidgets {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
+            const SizedBox(
               width: 50,
               height: 50,
               child: LogoAvatar(),
             ),
             _generatePackageInfoColumn(),
-            SizedBox(width: 50),
+            const SizedBox(width: 50),
           ],
         ),
       ],
@@ -35,31 +35,31 @@ class BoardWidgets {
           child: Column(
             children: [
               Text(AppLocalizations.of(context)!.donateDescription),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text('\$ 0.00'),
+                    child: const Text('\$ 0.00'),
                   ),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text('\$ 0.00'),
+                    child: const Text('\$ 0.00'),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text('\$ 0.00'),
+                    child: const Text('\$ 0.00'),
                   ),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text('\$ 0.00'),
+                    child: const Text('\$ 0.00'),
                   ),
                 ],
               ),
@@ -92,7 +92,7 @@ class BoardWidgets {
         child: (themeId == DynamicTheme.of(context)!.themeId ||
                 Helper.generateDarkThemeId(themeId) ==
                     DynamicTheme.of(context)!.themeId)
-            ? Icon(
+            ? const Icon(
                 Icons.check,
                 size: 30,
                 color: Colors.white,
@@ -112,24 +112,24 @@ class BoardWidgets {
           children = <Widget>[
             Text(
               snapshot.data!.appName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
             ),
             snapshot.data!.packageName.isEmpty
-                ? SizedBox(height: 0)
+                ? const SizedBox(height: 0)
                 : Text(snapshot.data!.packageName),
-            SizedBox(height: 8),
-            Text('Version: ' + snapshot.data!.version),
-            Text('Build number: ' + snapshot.data!.buildNumber),
+            const SizedBox(height: 8),
+            Text('Version: ${snapshot.data!.version}'),
+            Text('Build number: ${snapshot.data!.buildNumber}'),
           ];
         } else {
           children = <Widget>[
-            SizedBox(
-              child: CircularProgressIndicator(),
+            const SizedBox(
               width: 50,
               height: 50,
+              child: CircularProgressIndicator(),
             ),
           ];
         }
@@ -144,29 +144,29 @@ class BoardWidgets {
 }
 
 class LogoAvatar extends StatefulWidget {
+  const LogoAvatar({Key? key}) : super(key: key);
+
   @override
-  _LogoAvatarState createState() => _LogoAvatarState();
+  LogoAvatarState createState() => LogoAvatarState();
 }
 
-class _LogoAvatarState extends State<LogoAvatar>
+class LogoAvatarState extends State<LogoAvatar>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        onDoubleTap: () {
-          _animationController.reset();
-          _animationController.forward();
-        },
-        child: RotationTransition(
-          turns: _animation,
-          child: CircleAvatar(
-            foregroundImage: AssetImage('assets/images/icon-drawer.png'),
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
+    return GestureDetector(
+      onDoubleTap: () {
+        _animationController.reset();
+        _animationController.forward();
+      },
+      child: RotationTransition(
+        turns: _animation,
+        child: CircleAvatar(
+          foregroundImage: const AssetImage('assets/images/icon-drawer.png'),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );
@@ -182,7 +182,7 @@ class _LogoAvatarState extends State<LogoAvatar>
   void initState() {
     super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _animation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.elasticOut,

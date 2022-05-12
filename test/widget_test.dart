@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Tap add note button smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(const MyApp());
 
     expect(find.byIcon(Icons.add), findsOneWidget);
     expect(find.byType(FloatingActionButton), findsOneWidget);

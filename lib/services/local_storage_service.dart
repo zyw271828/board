@@ -11,7 +11,7 @@ class LocalStorageService {
 
     if (numberOfNotes != null) {
       for (var i = 0; i < numberOfNotes; i++) {
-        String jsonString = prefs.getString('note' + i.toString())!;
+        String jsonString = prefs.getString('note$i')!;
         Map noteMap = jsonDecode(jsonString);
         var note = Note.fromJson(noteMap as Map<String, dynamic>);
         notes.add(note);
@@ -49,14 +49,14 @@ class LocalStorageService {
     int? numberOfNotes = prefs.getInt('numberOfNotes');
     if (numberOfNotes != null) {
       for (var i = 0; i < numberOfNotes; i++) {
-        prefs.remove('note' + i.toString());
+        prefs.remove('note$i');
       }
     }
 
     numberOfNotes = notes.length;
     for (var i = 0; i < numberOfNotes; i++) {
       String json = jsonEncode(notes[i]);
-      prefs.setString('note' + i.toString(), json);
+      prefs.setString('note$i', json);
     }
     prefs.setInt('numberOfNotes', numberOfNotes);
   }
