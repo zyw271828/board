@@ -54,31 +54,8 @@ class HomePageState extends State<HomePage>
                 ),
                 title: TextField(
                   autofocus: true,
-                  cursorColor: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                      )
-                      .color,
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                          )
-                          .color),
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.searchNote,
-                    hintStyle: TextStyle(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            )
-                            .color),
                     border: InputBorder.none,
                   ),
                   onChanged: (value) {
@@ -299,7 +276,20 @@ class HomePageState extends State<HomePage>
               constraints: const BoxConstraints(minHeight: 50),
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-              child: Center(child: Text(notes[index]!.content!)),
+              child: Center(
+                child: Text(
+                  notes[index]!.content!,
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        )
+                        .color,
+                  ),
+                ),
+              ),
             ),
             onPressed: () => _showNote(notes, index),
             onLongPress: () =>

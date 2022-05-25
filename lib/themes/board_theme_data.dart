@@ -23,20 +23,45 @@ class BoardThemeData {
 
   static final themeCollection = ThemeCollection(
     themes: {
-      pink: ThemeData(primarySwatch: Colors.pink),
-      red: ThemeData(primarySwatch: Colors.red),
-      orange: ThemeData(primarySwatch: Colors.orange),
-      yellow: ThemeData(primarySwatch: Colors.yellow),
-      green: ThemeData(primarySwatch: Colors.green),
-      teal: ThemeData(primarySwatch: Colors.teal),
-      blue: ThemeData(primarySwatch: Colors.blue),
-      purple: ThemeData(primarySwatch: Colors.purple),
+      pink: ThemeData(
+        primarySwatch: Colors.pink,
+        useMaterial3: true,
+      ),
+      red: ThemeData(
+        primarySwatch: Colors.red,
+        useMaterial3: true,
+      ),
+      orange: ThemeData(
+        primarySwatch: Colors.orange,
+        useMaterial3: true,
+      ),
+      yellow: ThemeData(
+        primarySwatch: Colors.yellow,
+        useMaterial3: true,
+      ),
+      green: ThemeData(
+        primarySwatch: Colors.green,
+        useMaterial3: true,
+      ),
+      teal: ThemeData(
+        primarySwatch: Colors.teal,
+        useMaterial3: true,
+      ),
+      blue: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      purple: ThemeData(
+        primarySwatch: Colors.purple,
+        useMaterial3: true,
+      ),
       darkPink: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.pink,
           accentColor: Colors.pink,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkRed: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -44,6 +69,7 @@ class BoardThemeData {
           accentColor: Colors.red,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkOrange: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -51,6 +77,7 @@ class BoardThemeData {
           accentColor: Colors.orange,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkYellow: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -58,6 +85,7 @@ class BoardThemeData {
           accentColor: Colors.yellow,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkGreen: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -65,6 +93,7 @@ class BoardThemeData {
           accentColor: Colors.green,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkTeal: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -72,6 +101,7 @@ class BoardThemeData {
           accentColor: Colors.teal,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkBlue: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -79,6 +109,7 @@ class BoardThemeData {
           accentColor: Colors.blue,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
       darkPurple: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -86,6 +117,7 @@ class BoardThemeData {
           accentColor: Colors.purple,
           brightness: Brightness.dark,
         ),
+        useMaterial3: true,
       ),
     },
   );
