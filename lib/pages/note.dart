@@ -179,43 +179,23 @@ class NotePageState extends State<NotePage> {
                   },
                   onScaleUpdate: (details) {
                     setState(() {
-                      // _showFontSizeIndicator = true;
+                      _showFontSizeIndicator = true;
                       _scaleFactor = _baseScaleFactor * details.scale;
                       _fontSizeIndicatorValue =
                           (_scaleFactor * (_indicatorLevel / 3)).toInt();
                     });
                   },
-                  onHorizontalDragEnd: (details) {
-                    if (details.velocity.pixelsPerSecond.dx > 0) {
-                      setState(() {
-                        if (_index <= 0) {
-                          _index = widget.notes.length - 1;
-                        } else {
-                          _index--;
-                        }
+                  onScaleEnd: (details) async {
+                    try {
+                      await Future.delayed(const Duration(seconds: 1), () {
+                        setState(() {
+                          _showFontSizeIndicator = false;
+                        });
                       });
-                    } else if (details.velocity.pixelsPerSecond.dx < 0) {
-                      setState(() {
-                        if (_index >= widget.notes.length - 1) {
-                          _index = 0;
-                        } else {
-                          _index++;
-                        }
-                      });
+                    } on FlutterError catch (e) {
+                      debugPrint(e.message);
                     }
                   },
-                  // onScaleEnd: (details) async {
-                  //   // https://github.com/flutter/flutter/issues/13102
-                  //   try {
-                  //     await Future.delayed(const Duration(seconds: 1), () {
-                  //       setState(() {
-                  //         _showFontSizeIndicator = false;
-                  //       });
-                  //     });
-                  //   } on FlutterError catch (e) {
-                  //     debugPrint(e.message);
-                  //   }
-                  // },
                 ),
               ),
               Row(
@@ -237,6 +217,15 @@ class NotePageState extends State<NotePage> {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (_index <= 0) {
+                                _index = widget.notes.length - 1;
+                              } else {
+                                _index--;
+                              }
+                            });
+                          },
                           onVerticalDragUpdate: (details) async {
                             setState(() {
                               _showBrightnessIndicator = true;
@@ -289,6 +278,15 @@ class NotePageState extends State<NotePage> {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (_index >= widget.notes.length - 1) {
+                                _index = 0;
+                              } else {
+                                _index++;
+                              }
+                            });
+                          },
                           onVerticalDragUpdate: (details) {
                             setState(() {
                               _showFontSizeIndicator = true;
