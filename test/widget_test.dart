@@ -10,7 +10,7 @@ void main() {
     expect(find.byType(FloatingActionButton), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle(const Duration(seconds: 1));
 
     expect(find.byType(SimpleDialog), findsOneWidget);
   });
