@@ -22,4 +22,6 @@ jobs:
         with:
           flutter-version: "3.0.3"
       - name: Deploy to GitHub Pages
-        uses: jeremynac/flutter-gh-pages@beta
+        uses: bluefireteam/flutter-gh-pages@v8
+        with:
+          baseHref: /board/
