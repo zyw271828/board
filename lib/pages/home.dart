@@ -26,14 +26,15 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+
         if (_isSearchButtonPressed) {
           _playAnimation();
           _exitSearchMode();
-          return Future<bool>.value(false);
-        } else {
-          return Future<bool>.value(true);
         }
       },
       child: Scaffold(

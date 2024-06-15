@@ -44,10 +44,13 @@ class NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(_focusNode);
 
-    return WillPopScope(
-      onWillPop: () {
+    return PopScope(
+      onPopInvoked: (bool didPop) {
+        if (didPop) {
+          return;
+        }
+
         Helper.exitDisplayMode();
-        return Future<bool>.value(true);
       },
       child: Scaffold(
         appBar: _showAppBar
@@ -134,9 +137,9 @@ class NotePageState extends State<NotePage> {
                 ],
               )
             : null,
-        body: RawKeyboardListener(
+        body: KeyboardListener(
           focusNode: _focusNode,
-          onKey: _handleKeyEvent,
+          onKeyEvent: _handleKeyEvent,
           child: Stack(
             children: [
               Container(
@@ -339,7 +342,6 @@ class NotePageState extends State<NotePage> {
         size: min(MediaQuery.of(context).size.height,
                 MediaQuery.of(context).size.width) -
             100,
-        foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       );
     } else if (_isMarkdownButtonPressed) {
@@ -347,13 +349,13 @@ class NotePageState extends State<NotePage> {
         data: widget.notes[_index]!.content!,
         selectable: true,
         styleSheet: MarkdownStyleSheet(
-          textScaleFactor: _scaleFactor,
+          textScaler: TextScaler.linear(_scaleFactor),
         ),
       );
     } else {
       return SelectableText(
         widget.notes[_index]!.content!,
-        textScaleFactor: _scaleFactor,
+        textScaler: TextScaler.linear(_scaleFactor),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: _noteFontSize,
@@ -439,7 +441,7 @@ class NotePageState extends State<NotePage> {
     );
   }
 
-  void _handleKeyEvent(RawKeyEvent event) {
+  void _handleKeyEvent(KeyEvent event) {
     if (event.runtimeType.toString() == 'RawKeyDownEvent') {
       setState(() {
         if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
