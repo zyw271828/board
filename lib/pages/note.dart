@@ -16,8 +16,7 @@ class NotePage extends StatefulWidget {
   final List<Note?> notes;
   final int index;
 
-  const NotePage({Key? key, required this.notes, required this.index})
-      : super(key: key);
+  const NotePage({super.key, required this.notes, required this.index});
 
   @override
   NotePageState createState() => NotePageState();
@@ -335,7 +334,7 @@ class NotePageState extends State<NotePage> {
 
   Widget _generateDisplayWidget() {
     if (_isQRcodeButtonPressed) {
-      return QrImage(
+      return QrImageView(
         data: widget.notes[_index]!.content!,
         size: min(MediaQuery.of(context).size.height,
                 MediaQuery.of(context).size.width) -
@@ -361,7 +360,7 @@ class NotePageState extends State<NotePage> {
           color: _isColorButtonPressed
               ? Theme.of(context)
                   .textTheme
-                  .bodyText1!
+                  .bodyLarge!
                   .copyWith(
                     color: Theme.of(context).colorScheme.onSecondary,
                   )

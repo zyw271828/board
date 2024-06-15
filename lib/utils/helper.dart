@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screen_wake/flutter_screen_wake.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Helper {
   static Future<void> enterDisplayMode() async {
@@ -13,12 +13,10 @@ class Helper {
     enterFullscreenMode();
 
     try {
-      Wakelock.enable();
+      WakelockPlus.enable();
       FlutterScreenWake.setBrightness(
           await LocalStorageService.loadScreenBrightness());
     } on PlatformException catch (e) {
-      // Waiting for wakelock to support Linux
-      // https://github.com/creativecreatorormaybenot/wakelock/issues/97
       if (kDebugMode) {
         print(e.message);
       }
@@ -53,14 +51,12 @@ class Helper {
           await FlutterScreenWake.brightness);
       // Restore system screen brightness
       FlutterScreenWake.setBrightness(-1);
-      Wakelock.disable();
+      WakelockPlus.disable();
     } on MissingPluginException catch (e) {
       if (kDebugMode) {
         print(e.message);
       }
     } on PlatformException catch (e) {
-      // Waiting for wakelock to support Linux
-      // https://github.com/creativecreatorormaybenot/wakelock/issues/97
       if (kDebugMode) {
         print(e.message);
       }

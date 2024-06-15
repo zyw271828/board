@@ -55,8 +55,10 @@ class LocalStorageService {
 
     numberOfNotes = notes.length;
     for (var i = 0; i < numberOfNotes; i++) {
-      String json = jsonEncode(notes[i]);
-      prefs.setString('note$i', json);
+      if (notes[i] != null) {
+        String json = jsonEncode(notes[i]);
+        prefs.setString('note$i', json);
+      }
     }
     prefs.setInt('numberOfNotes', numberOfNotes);
   }

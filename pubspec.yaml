@@ -1,6 +1,5 @@
 name: board
 description: A Display Board.
-
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -20,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.3.0+1
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.4.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,20 +32,20 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
+  intl: ^0.19.0
   flutter_screen_wake: ^1.0.2
-  shared_preferences: ^2.1.1
+  shared_preferences: ^2.2.3
   flutter_launcher_icons: ^0.13.1
   dynamic_themes: ^1.1.0
-  wakelock: ^0.6.2
-  qr_flutter: ^4.0.0
-  flutter_markdown: ^0.6.14
-  package_info_plus: ^3.1.2
-  share_plus: ^6.3.4
+  wakelock_plus: ^1.2.5
+  qr_flutter: ^4.1.0
+  flutter_markdown: ^0.7.2
+  package_info_plus: ^8.0.0
+  share_plus: ^9.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
+  cupertino_icons: ^1.0.8
 
 flutter_icons:
   image_path_android: 'assets/images/icon-android.png'
@@ -66,7 +65,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.1
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

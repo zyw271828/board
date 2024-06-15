@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   HomePageState createState() => HomePageState();
@@ -264,9 +264,9 @@ class HomePageState extends State<HomePage>
         children: [
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color?>(
+              backgroundColor: WidgetStateProperty.all<Color?>(
                   swatch[notes[index]!.colorCode]),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                 const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 ),
@@ -282,7 +282,7 @@ class HomePageState extends State<HomePage>
                   style: TextStyle(
                     color: Theme.of(context)
                         .textTheme
-                        .bodyText1!
+                        .bodyLarge!
                         .copyWith(
                           color: Theme.of(context).colorScheme.onSecondary,
                         )
@@ -305,7 +305,7 @@ class HomePageState extends State<HomePage>
                 _isSearchButtonPressed ? null : Icons.drag_handle,
                 color: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodyLarge!
                     .copyWith(
                       color: Theme.of(context).colorScheme.onSecondary,
                     )

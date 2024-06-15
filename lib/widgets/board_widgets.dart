@@ -144,7 +144,7 @@ class BoardWidgets {
 }
 
 class LogoAvatar extends StatefulWidget {
-  const LogoAvatar({Key? key}) : super(key: key);
+  const LogoAvatar({super.key});
 
   @override
   LogoAvatarState createState() => LogoAvatarState();

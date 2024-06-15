@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/board_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NavDrawer extends StatefulWidget {
-  const NavDrawer({Key? key}) : super(key: key);
+  const NavDrawer({super.key});
 
   @override
   NavDrawerState createState() => NavDrawerState();
